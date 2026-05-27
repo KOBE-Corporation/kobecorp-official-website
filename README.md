@@ -1,73 +1,93 @@
-# React + TypeScript + Vite
+# KOBE Corporation — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Application frontend de KOBE Corporation, développée avec React + TypeScript + Vite.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19
+- TypeScript
+- Vite 7
+- Tailwind CSS
+- Docker (multi-stage build Node -> Nginx)
 
-## React Compiler
+## Prérequis
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 22
+- npm
+- Docker (optionnel pour exécution conteneurisée)
 
-## Expanding the ESLint configuration
+## Installation locale
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm ci --legacy-peer-deps
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Commandes utiles
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+# développement
+npm run dev
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# lint
+npm run lint
+
+# build production
+npm run build
+
+# preview local du build
+npm run preview
 ```
+
+## Docker
+
+### Build image
+
+```bash
+docker build -f setup-front/Dockerfile -t kobecorporation-web:local .
+```
+
+### Run image
+
+```bash
+docker run --rm -p 8080:80 kobecorporation-web:local
+```
+
+Puis ouvrir `http://localhost:8080`.
+
+## Déploiement VPS (résumé)
+
+Le déploiement CI/CD utilise le workflow `/.github/workflows/cicd.yml`.
+
+Flow principal:
+
+1. Build et tests
+2. Build image Docker
+3. Push image sur Docker Hub
+4. Signature image (cosign)
+5. Déploiement VPS via SSH:
+   - `docker pull <image>`
+   - `docker compose -f compose.yaml pull`
+   - `docker compose -f compose.yaml up -d --force-recreate --remove-orphans`
+6. Smoke test post-déploiement
+
+Le reverse proxy Nginx est géré dans un dépôt séparé.
+
+## Secrets GitHub Actions requis
+
+- `DOCKERHUB_USERNAME`
+- `DOCKERHUB_PASSWORD`
+- `VPS_HOST`
+- `VPS_PORT` (optionnel, défaut 22)
+- `VPS_USERNAME`
+- `VPS_SSH_KEY`
+- `VPS_DEPLOY_DIR` (optionnel)
+- `VITE_EMAILJS_PUBLIC_KEY`
+- `VITE_EMAILJS_SERVICE_ID`
+- `VITE_EMAILJS_CONTACT_TEMPLATE_ID`
+- `VITE_EMAILJS_NEWSLETTER_TEMPLATE_ID`
+
+## Notes
+
+- `setup-front/.env` ne doit jamais être commité.
+- Le conteneur applicatif expose uniquement le port interne `80` sur le réseau Docker.
+- Documentation de déploiement détaillée: `DEPLOYMENT.md`.
