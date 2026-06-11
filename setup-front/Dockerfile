@@ -17,10 +17,7 @@ COPY package.json package-lock.json ./
 
 # Installer les dépendances (y compris devDependencies pour le build)
 # Configurer npm pour des timeouts plus longs et retry automatique
-RUN npm config set fetch-retries 5 && \
-    npm config set fetch-retry-mintimeout 20000 && \
-    npm config set fetch-retry-maxtimeout 120000 && \
-    npm install --legacy-peer-deps --no-audit
+RUN npm ci --legacy-peer-deps --no-audit
 
 # Copier le code source
 COPY . .
