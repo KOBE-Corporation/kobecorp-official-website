@@ -40,8 +40,10 @@ export function Button({
     lg: 'px-8 py-4 text-base',
   }
 
-  const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed hover:translate-y-0 hover:scale-100' : ''
-  const baseClasses = `inline-flex items-center gap-2 rounded-full font-semibold transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-0 focus:border-0 ${variantClasses[variant]} ${sizeClasses[size]} ${disabledClasses} ${className}`
+  const disabledClasses = disabled
+    ? 'opacity-50 !cursor-not-allowed hover:!translate-y-0 hover:!shadow-md'
+    : 'hover:-translate-y-0.5'
+  const baseClasses = `inline-flex items-center gap-2 rounded-full font-semibold transition-all duration-300 focus:outline-none focus:ring-0 focus:border-0 ${variantClasses[variant]} ${sizeClasses[size]} ${disabledClasses} ${className}`
 
   const content = (
     <>
@@ -50,6 +52,21 @@ export function Button({
       {icon && iconPosition === 'right' && <span className="flex-shrink-0">{icon}</span>}
     </>
   )
+
+  // Liens désactivés : pas de navigation, curseur d'interdiction
+  if (disabled && (to || href)) {
+    return (
+      <span
+        role="link"
+        aria-disabled="true"
+        tabIndex={-1}
+        title={href || to}
+        className={`${baseClasses} cursor-not-allowed`}
+      >
+        {content}
+      </span>
+    )
+  }
 
   if (to) {
     return (

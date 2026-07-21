@@ -406,7 +406,8 @@ function Programmes() {
                   <div className="pt-4 transition-all duration-1000 delay-700">
                     {programme.id === 'freelances' && (
                       <Button
-                        to="/contact"
+                        href="https://freelance.kobecorporation.com"
+                        disabled
                         variant="primary"
                         size="lg"
                         icon={<ArrowRightIcon className="h-5 w-5" />}
@@ -419,7 +420,8 @@ function Programmes() {
                     )}
                     {programme.id === 'etudiants' && (
                       <Button
-                        to="/contact"
+                        href="https://internship.kobecorporation.com"
+                        disabled
                         variant="primary"
                         size="lg"
                         icon={<ArrowRightIcon className="h-5 w-5" />}
@@ -432,7 +434,8 @@ function Programmes() {
                     )}
                     {programme.id === 'open-source' && (
                       <Button
-                        href="https://github.com/kobecorporation"
+                        href="https://open-source.kobecorporation.com"
+                        disabled
                         variant="primary"
                         size="lg"
                         icon={<ArrowRightIcon className="h-5 w-5" />}
@@ -445,7 +448,8 @@ function Programmes() {
                     )}
                     {programme.id === 'networking' && (
                       <Button
-                        to="/contact"
+                        href="https://community.kobecorporation.com"
+                        disabled
                         variant="primary"
                         size="lg"
                         icon={<ArrowRightIcon className="h-5 w-5" />}
