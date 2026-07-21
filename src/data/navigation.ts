@@ -1,4 +1,5 @@
 import { useLanguage } from '../contexts/LanguageContext'
+import { localizePath } from '../utils/locale'
 
 export type NavItem = {
   label: string
@@ -12,7 +13,7 @@ export function useNavigationItems(): NavItem[] {
   return [
     {
       label: t('nav.home'),
-      path: '/',
+      path: localizePath('/', language),
       sections: [
         { label: language === 'fr' ? 'Accueil' : 'Home', anchor: 'hero' },
         { label: language === 'fr' ? 'Services' : 'Services', anchor: 'services' },
@@ -24,7 +25,7 @@ export function useNavigationItems(): NavItem[] {
     },
     {
       label: t('nav.services'),
-      path: '/services',
+      path: localizePath('/services', language),
       sections: [
         { label: language === 'fr' ? 'Accueil' : 'Home', anchor: 'hero' },
         { label: language === 'fr' ? 'Forfaits SaaS' : 'SaaS Plans', anchor: 'forfait-saas' },
@@ -36,18 +37,18 @@ export function useNavigationItems(): NavItem[] {
     },
     {
       label: t('nav.programs'),
-      path: '/programmes',
+      path: localizePath('/programmes', language),
       sections: [
         { label: language === 'fr' ? 'Accueil' : 'Home', anchor: 'hero' },
         { label: language === 'fr' ? 'Freelances' : 'Freelances', anchor: 'freelances' },
-        { label: language === 'fr' ? 'Étudiants' : 'Students', anchor: 'students' },
-        { label: language === 'fr' ? 'Open Source' : 'Open Source', anchor: 'opensource' },
+        { label: language === 'fr' ? 'Étudiants' : 'Students', anchor: 'etudiants' },
+        { label: language === 'fr' ? 'Open Source' : 'Open Source', anchor: 'open-source' },
         { label: language === 'fr' ? 'Networking' : 'Networking', anchor: 'networking' },
       ],
     },
     {
       label: t('nav.about'),
-      path: '/about',
+      path: localizePath('/about', language),
       sections: [
         { label: language === 'fr' ? 'Accueil' : 'Home', anchor: 'hero' },
         { label: language === 'fr' ? 'Notre Histoire' : 'Our Story', anchor: 'story' },
@@ -57,11 +58,11 @@ export function useNavigationItems(): NavItem[] {
     },
     {
       label: t('nav.portfolio'),
-      path: '/portfolio',
+      path: localizePath('/portfolio', language),
     },
     {
       label: t('nav.contact'),
-      path: '/contact',
+      path: localizePath('/contact', language),
     },
   ]
 }

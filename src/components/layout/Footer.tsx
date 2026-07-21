@@ -10,11 +10,13 @@ import { WhatsAppIcon, FacebookIcon, LinkedInIcon, InstagramIcon } from '../icon
 import { NavigationMenu } from '../navigation/NavigationMenu'
 import { useNavigationItems } from '../../data/navigation'
 import { OptimizedImage } from '../OptimizedImage'
+import { useLocalizedPath } from '../../hooks/useLocalizedPath'
 
 const Footer = memo(function Footer() {
   const { language, setLanguage, t } = useLanguage()
   const { openSettings } = useCookies()
   const navItems = useNavigationItems()
+  const lp = useLocalizedPath()
 
   return (
     <footer className="border-t border-neutral-200 bg-neutral-50 py-12">
@@ -22,7 +24,7 @@ const Footer = memo(function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Colonne 1: À Propos */}
           <div className="lg:col-span-2">
-            <NavLink to="/" className="mb-4 inline-flex items-center gap-2 transition-transform duration-200 hover:scale-105 focus:outline-none rounded-lg">
+            <NavLink to={lp('/')} className="mb-4 inline-flex items-center gap-2 transition-transform duration-200 hover:scale-105 focus:outline-none rounded-lg">
               <div className="flex h-12 w-12 items-center justify-center bg-transparent transition-all duration-200 hover:scale-105 p-1.5">
                 <OptimizedImage
                   src="/logo-nom.jpeg"
@@ -76,7 +78,7 @@ const Footer = memo(function Footer() {
               {programmes.map((programme) => (
                 <NavLink
                   key={programme.id}
-                  to={`/programmes#${programme.id}`}
+                  to={lp(`/programmes#${programme.id}`)}
                   className="block text-sm text-neutral-600 transition-all duration-200 hover:text-brand-500 focus:outline-none rounded"
                 >
                   {language === 'fr' ? programme.title : programme.titleEn}
@@ -165,19 +167,19 @@ const Footer = memo(function Footer() {
               <p className="mb-2 font-medium text-neutral-700">{t('footer.copyright')}</p>
               <div className="flex flex-wrap gap-4">
                 <NavLink
-                  to="/privacy"
+                  to={lp('/privacy')}
                   className="text-neutral-600 transition-colors duration-200 hover:text-brand-500 focus:outline-none rounded"
                 >
                   {t('footer.legal.privacy')}
                 </NavLink>
                 <NavLink
-                  to="/legal"
+                  to={lp('/legal')}
                   className="text-neutral-600 transition-colors duration-200 hover:text-brand-500 focus:outline-none rounded"
                 >
                   {t('footer.legal.terms')}
                 </NavLink>
                 <NavLink
-                  to="/terms"
+                  to={lp('/terms')}
                   className="text-neutral-600 transition-colors duration-200 hover:text-brand-500 focus:outline-none rounded"
                 >
                   {language === 'fr' ? 'CGU' : 'Terms'}

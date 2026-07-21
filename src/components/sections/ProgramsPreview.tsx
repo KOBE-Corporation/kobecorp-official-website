@@ -3,11 +3,13 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { programmes } from '../../data/siteContent'
 import { useScrollAnimation } from '../../hooks/useScrollAnimation'
+import { useLocalizedPath } from '../../hooks/useLocalizedPath'
 import { Card } from '../ui/Card'
 
 function ProgramsPreview() {
   const { language, t } = useLanguage()
   const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.1 })
+  const lp = useLocalizedPath()
 
   return (
     <section id="programs" ref={elementRef} className="space-y-10 md:space-y-12">
@@ -32,7 +34,7 @@ function ProgramsPreview() {
           </p>
         </div>
         <NavLink
-          to="/programmes"
+          to={lp('/programmes')}
           className="group hidden items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 shadow-subtle transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 hover:shadow-md md:inline-flex focus:outline-none"
         >
           {language === 'fr' ? 'Voir tous les programmes' : 'View all programs'}
@@ -74,7 +76,7 @@ function ProgramsPreview() {
             
             <div className="mt-auto pt-4">
               <NavLink
-                to={`/programmes#${programme.id}`}
+                to={lp(`/programmes#${programme.id}`)}
                 className="group/link inline-flex items-center gap-2 text-sm font-semibold text-brand-500 transition-all duration-300 hover:gap-3 hover:text-brand-600 focus:outline-none"
               >
                 <span>

@@ -1,7 +1,14 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import type { Language } from '../utils/i18n'
 import { getTranslation } from '../utils/i18n'
+import {
+  getLocaleFromPath,
+  getPreferredLocale,
+  isSupportedLocale,
+  switchLocaleInPath,
+} from '../utils/locale'
 
 interface LanguageContextType {
   language: Language
@@ -11,52 +18,73 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
-// Fonction helper pour vérifier si on peut utiliser localStorage
 const canUseStorage = (): boolean => {
   try {
     const consent = localStorage.getItem('kobe-cookie-consent')
     const prefs = localStorage.getItem('kobe-cookie-preferences')
-    
+
     if (consent === 'true' && prefs) {
       try {
         const parsed = JSON.parse(prefs)
         return parsed.preferences === true
       } catch {
-        return true // Par défaut, on autorise si erreur de parsing
+        return true
       }
     }
-    // Si pas de consentement encore, on autorise (première visite)
     return true
   } catch {
     return false
   }
 }
 
+function persistLanguage(lang: Language) {
+  if (!canUseStorage()) return
+  try {
+    localStorage.setItem('kobe-language', lang)
+  } catch {
+    // ignore
+  }
+}
+
+function getInitialLanguage(): Language {
+  if (typeof window !== 'undefined') {
+    const fromUrl = getLocaleFromPath(window.location.pathname)
+    if (fromUrl) return fromUrl
+  }
+  return getPreferredLocale()
+}
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(() => {
-    // Détecter la langue du navigateur ou utiliser celle sauvegardée
-    if (canUseStorage()) {
-      try {
-        const saved = localStorage.getItem('kobe-language') as Language
-        if (saved && (saved === 'fr' || saved === 'en')) {
-          return saved
-        }
-      } catch {
-        // Ignorer les erreurs
-      }
-    }
-    const browserLang = navigator.language.split('-')[0]
-    return browserLang === 'fr' ? 'fr' : 'en'
-  })
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [language, setLanguageState] = useState<Language>(getInitialLanguage)
+
+  // Sync langue ↔ URL + attribut html lang
+  useEffect(() => {
+    const fromUrl = getLocaleFromPath(location.pathname)
+    if (!fromUrl) return
+
+    setLanguageState((prev) => {
+      if (prev === fromUrl) return prev
+      persistLanguage(fromUrl)
+      return fromUrl
+    })
+    document.documentElement.lang = fromUrl
+  }, [location.pathname])
 
   const setLanguage = (lang: Language) => {
+    if (!isSupportedLocale(lang) || lang === language) return
+
     setLanguageState(lang)
-    if (canUseStorage()) {
-      try {
-        localStorage.setItem('kobe-language', lang)
-      } catch {
-        // Ignorer les erreurs de localStorage
-      }
+    persistLanguage(lang)
+    document.documentElement.lang = lang
+
+    const currentLocale = getLocaleFromPath(location.pathname)
+    if (currentLocale) {
+      navigate(
+        switchLocaleInPath(location.pathname, lang, location.search, location.hash),
+        { replace: false },
+      )
     }
   }
 

@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
+import { useLanguage } from '../../contexts/LanguageContext'
+import { localizePath } from '../../utils/locale'
 
 interface ButtonProps {
   children: ReactNode
@@ -28,10 +30,14 @@ export function Button({
   icon,
   iconPosition = 'right',
 }: ButtonProps) {
+  const { language } = useLanguage()
+
   const variantClasses = {
     primary: 'bg-brand-500 text-white hover:bg-brand-600 shadow-md hover:shadow-lg',
-    secondary: 'bg-white text-neutral-700 border border-neutral-200 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 shadow-subtle hover:shadow-md',
-    outline: 'bg-transparent text-brand-500 border border-brand-500 hover:bg-brand-50 hover:border-brand-600',
+    secondary:
+      'bg-white text-neutral-700 border border-neutral-200 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 shadow-subtle hover:shadow-md',
+    outline:
+      'bg-transparent text-brand-500 border border-brand-500 hover:bg-brand-50 hover:border-brand-600',
   }
 
   const sizeClasses = {
@@ -45,6 +51,8 @@ export function Button({
     : 'hover:-translate-y-0.5'
   const baseClasses = `inline-flex items-center gap-2 rounded-full font-semibold transition-all duration-300 focus:outline-none focus:ring-0 focus:border-0 ${variantClasses[variant]} ${sizeClasses[size]} ${disabledClasses} ${className}`
 
+  const localizedTo = to ? localizePath(to, language) : undefined
+
   const content = (
     <>
       {icon && iconPosition === 'left' && <span className="flex-shrink-0">{icon}</span>}
@@ -53,14 +61,13 @@ export function Button({
     </>
   )
 
-  // Liens désactivés : pas de navigation, curseur d'interdiction
   if (disabled && (to || href)) {
     return (
       <span
         role="link"
         aria-disabled="true"
         tabIndex={-1}
-        title={href || to}
+        title={href || localizedTo}
         className={`${baseClasses} cursor-not-allowed`}
       >
         {content}
@@ -68,9 +75,9 @@ export function Button({
     )
   }
 
-  if (to) {
+  if (localizedTo) {
     return (
-      <NavLink to={to} className={baseClasses}>
+      <NavLink to={localizedTo} className={baseClasses}>
         {content}
       </NavLink>
     )
