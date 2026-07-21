@@ -15,38 +15,17 @@ import {
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import SEO from '../components/SEO'
 import { getSEOData } from '../data/seoData'
+import {
+  getServiceDetails,
+  serviceImages,
+  sectionIdMap,
+  type ServiceDetail,
+} from '../data/servicesPageContent'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
-import { Badge } from '../components/ui/Badge'
 import { OptimizedImage } from '../components/OptimizedImage'
 import { SaaSPricing } from '../components/sections/SaaSPricing'
-
-// Images professionnelles pour chaque service (2 par service)
-const serviceImages = {
-  'developpement-logiciel': [
-    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop&q=80',
-  ],
-  'hebergement-infrastructure': [
-    'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=600&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop&q=80',
-  ],
-  'consultation-audit': [
-    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop&q=80',
-  ],
-  'formation-bootcamp': [
-    'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop&q=80',
-  ],
-}
-
-const sectionIdMap: Record<string, string> = {
-  'developpement-logiciel': 'development',
-  'hebergement-infrastructure': 'hosting',
-  'consultation-audit': 'consultation',
-  'formation-bootcamp': 'training',
-}
+import { PageHero } from '../components/sections/PageHero'
 
 function MethodologyStep({
   step,
@@ -124,20 +103,7 @@ function ServiceDetailSection({
   language,
 }: {
   service: (typeof services)[number]
-  detail: {
-    id: string
-    icon: React.ReactNode
-    title: string
-    description: string
-    sections?: Array<{ subtitle: string; content: string; icon: React.ReactNode }>
-    guarantees?: string[]
-    features?: string[]
-    plans?: Array<{ name: string; desc: string; features?: string[] }>
-    services?: string[]
-    deliverables?: string[]
-    programs?: string[]
-    formats?: string[]
-  }
+  detail: ServiceDetail
   images: string[]
   index: number
   language: 'fr' | 'en'
@@ -537,8 +503,8 @@ function ServiceDetailSection({
 
 function Services() {
   const { language } = useLanguage()
-  const { elementRef: introRef, isVisible: introVisible } = useScrollAnimation({ threshold: 0.2 })
   const seo = getSEOData('/services', language)
+  const serviceDetails = getServiceDetails(language)
   const servicesStructuredData = [
     {
       '@context': 'https://schema.org',
@@ -756,119 +722,21 @@ function Services() {
         structuredData={servicesStructuredData}
       />
     <div className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:pb-20 lg:px-8">
-      {/* Hero Section avec le même design que Home */}
-      <section
-        ref={introRef}
-        id="hero"
-        className="relative pt-4 pb-6 md:pt-6 md:pb-8 lg:pt-8 lg:pb-10 min-h-[450px] lg:min-h-[500px] xl:min-h-[550px] mb-20"
-        style={{ isolation: 'isolate' }}
-      >
-        {/* Modern Background with grid pattern and geometric shapes */}
-        <div 
-          className="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 overflow-hidden" 
-          style={{ 
-            zIndex: 0,
-            willChange: 'transform',
-          }}
-          aria-hidden="true"
-        >
-          {/* Subtle grid pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,122,255,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,122,255,0.15)_1px,transparent_1px)] bg-[size:40px_40px]" />
-          
-          {/* Geometric shapes - Rounded square - Animated floating */}
-          <div 
-            className="absolute top-20 right-20 h-32 w-32 rounded-2xl border-2 border-brand-300/70 animate-float-shape" 
-            style={{ animationDelay: '0s', willChange: 'transform' }} 
-          />
-          
-          {/* Geometric shapes - Circle - Animated gentle float */}
-          <div 
-            className="absolute bottom-32 left-16 h-24 w-24 rounded-full border-2 border-brand-300/65 animate-float-gentle animate-pulse-border" 
-            style={{ animationDelay: '1s', willChange: 'transform, opacity' }} 
-          />
-          
-          {/* Geometric shapes - Hexagon - Animated slow rotation */}
-          <div 
-            className="absolute top-1/2 right-1/4 h-20 w-20 border-2 border-brand-300/60 animate-rotate-slow" 
-            style={{ 
-              clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-              transformOrigin: 'center',
-              animationDelay: '2s',
-              willChange: 'transform',
-            }} 
-          />
-          
-          {/* Additional small shapes for depth - Animated */}
-          <div 
-            className="absolute top-40 left-1/3 h-16 w-16 rounded-lg border-2 border-accent-300/60 animate-float-shape" 
-            style={{ transform: 'rotate(-15deg)', animationDelay: '0.5s', willChange: 'transform' }} 
-          />
-          <div 
-            className="absolute bottom-40 right-1/3 h-12 w-12 rounded-full border-2 border-accent-300/55 animate-float-gentle animate-pulse-border" 
-            style={{ animationDelay: '1.5s', willChange: 'transform, opacity' }} 
-          />
-          
-        </div>
-
-        {/* Centered Content Container */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl text-center">
-            {/* Badge with enhanced animation */}
-            <div
-              className={`mb-8 flex justify-center transition-all duration-800 ease-out ${
-                introVisible
-                  ? 'translate-y-0 opacity-100 scale-100'
-                  : 'translate-y-8 opacity-0 scale-90'
-              }`}
-              style={{ transitionDelay: '150ms' }}
-            >
-              <Badge variant="primary" icon={<ClockIcon className="h-4 w-4 animate-pulse" />}>
-                {language === 'fr' ? 'Services Professionnels' : 'Professional Services'}
-              </Badge>
-            </div>
-
-            {/* Main Title */}
-            <h1
-              className={`mb-6 font-display text-4xl leading-[1.1] text-ink transition-all duration-1000 ease-out md:text-5xl lg:text-6xl ${
-                introVisible
-                  ? 'translate-y-0 opacity-100'
-                  : 'translate-y-12 opacity-0'
-              }`}
-              style={{ transitionDelay: '300ms' }}
-            >
-              {language === 'fr' ? 'Nos Services' : 'Our Services'}
-            </h1>
-
-            {/* Subtitle */}
-            <p
-              className={`mx-auto mb-4 max-w-3xl text-lg leading-relaxed text-neutral-700 transition-all duration-1000 ease-out md:text-xl ${
-                introVisible
-                  ? 'translate-y-0 opacity-100'
-                  : 'translate-y-10 opacity-0'
-              }`}
-              style={{ transitionDelay: '450ms' }}
-            >
-              {language === 'fr'
-                ? 'Des solutions technologiques complètes et sur mesure pour transformer vos défis en opportunités de croissance.'
-                : 'Complete and tailored technology solutions to transform your challenges into growth opportunities.'}
-            </p>
-
-            {/* Description */}
-            <p
-              className={`mx-auto mb-6 max-w-2xl text-base leading-relaxed text-neutral-600 transition-all duration-1000 ease-out ${
-                introVisible
-                  ? 'translate-y-0 opacity-100'
-                  : 'translate-y-10 opacity-0'
-              }`}
-              style={{ transitionDelay: '600ms' }}
-            >
-              {language === 'fr'
-                ? 'Expertise, innovation et accompagnement dédié pour votre réussite. Nous combinons stratégie, design et technologies de pointe pour livrer des résultats mesurables et durables.'
-                : 'Expertise, innovation and dedicated support for your success. We combine strategy, design and cutting-edge technologies to deliver measurable and sustainable results.'}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        badge={language === 'fr' ? 'Services Professionnels' : 'Professional Services'}
+        badgeIcon={<ClockIcon className="h-4 w-4 animate-pulse" />}
+        title={language === 'fr' ? 'Nos Services' : 'Our Services'}
+        subtitle={
+          language === 'fr'
+            ? 'Des solutions technologiques complètes et sur mesure pour transformer vos défis en opportunités de croissance.'
+            : 'Complete and tailored technology solutions to transform your challenges into growth opportunities.'
+        }
+        description={
+          language === 'fr'
+            ? 'Expertise, innovation et accompagnement dédié pour votre réussite. Nous combinons stratégie, design et technologies de pointe pour livrer des résultats mesurables et durables.'
+            : 'Expertise, innovation and dedicated support for your success. We combine strategy, design and cutting-edge technologies to deliver measurable and sustainable results.'
+        }
+      />
 
       {/* Forfait SaaS - Tarification */}
       <SaaSPricing />

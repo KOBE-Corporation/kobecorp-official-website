@@ -11,10 +11,11 @@ import {
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import SEO from '../components/SEO'
 import { getSEOData } from '../data/seoData'
+import { programmeDetails, type ProgrammeDetail } from '../data/programmesPageContent'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
-import { Badge } from '../components/ui/Badge'
 import { OptimizedImage } from '../components/OptimizedImage'
+import { PageHero } from '../components/sections/PageHero'
 
 // Images professionnelles pour chaque programme (2 par programme)
 const programmeImages = {
@@ -35,152 +36,6 @@ const programmeImages = {
     'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop&q=80',
   ],
 }
-
-// Détails enrichis pour chaque programme
-const programmeDetails = {
-  freelances: {
-    benefits: [
-      'Facturation simplifiée et automatisée',
-      'Gestion complète de la TVA et fiscalité',
-      'Contrats pré-rédigés et personnalisables',
-      'Support juridique et administratif',
-      'Statut professionnel reconnu',
-      'Accès à des projets premium',
-    ],
-    benefitsEn: [
-      'Simplified and automated invoicing',
-      'Complete VAT and tax management',
-      'Pre-written and customizable contracts',
-      'Legal and administrative support',
-      'Recognized professional status',
-      'Access to premium projects',
-    ],
-    stats: [
-      { label: 'Freelances actifs', labelEn: 'Active freelancers', value: '50+' },
-      { label: 'Projets livrés', labelEn: 'Projects delivered', value: '200+' },
-      { label: 'Satisfaction', labelEn: 'Satisfaction', value: '98%' },
-    ],
-    guarantees: [
-      'Cadre légal 100% conforme',
-      'Support administratif dédié',
-      'Facturation sous 24h',
-      'Protection juridique incluse',
-    ],
-    guaranteesEn: [
-      '100% compliant legal framework',
-      'Dedicated administrative support',
-      'Invoicing within 24h',
-      'Legal protection included',
-    ],
-  },
-  etudiants: {
-    benefits: [
-      'Projets réels en production',
-      'Mentorat personnalisé par expert',
-      'Code reviews hebdomadaires',
-      'Portfolio professionnel valorisé',
-      'Certification de compétences',
-      'Opportunités d\'embauche',
-    ],
-    benefitsEn: [
-      'Real projects in production',
-      'Personalized mentoring by expert',
-      'Weekly code reviews',
-      'Valued professional portfolio',
-      'Skills certification',
-      'Hiring opportunities',
-    ],
-    stats: [
-      { label: 'Stagiaires formés', labelEn: 'Trainees trained', value: '100+' },
-      { label: 'Taux d\'embauche', labelEn: 'Hiring rate', value: '75%' },
-      { label: 'Projets en prod', labelEn: 'Projects in prod', value: '150+' },
-    ],
-    guarantees: [
-      'Projets réels garantis',
-      'Mentor dédié expérimenté',
-      'Certification à la fin',
-      'Possibilité d\'embauche',
-    ],
-    guaranteesEn: [
-      'Real projects guaranteed',
-      'Dedicated experienced mentor',
-      'Certification at the end',
-      'Hiring possibility',
-    ],
-  },
-  'open-source': {
-    benefits: [
-      'Visibilité internationale',
-      'Contributions valorisées',
-      'Apprentissage collaboratif',
-      'Networking avec experts',
-      'Portfolio technique solide',
-      'Reconnaissance communautaire',
-    ],
-    benefitsEn: [
-      'International visibility',
-      'Valued contributions',
-      'Collaborative learning',
-      'Networking with experts',
-      'Strong technical portfolio',
-      'Community recognition',
-    ],
-    stats: [
-      { label: 'Contributeurs', labelEn: 'Contributors', value: '200+' },
-      { label: 'Projets actifs', labelEn: 'Active projects', value: '30+' },
-      { label: 'Stars GitHub', labelEn: 'GitHub stars', value: '5K+' },
-    ],
-    guarantees: [
-      'Projets professionnels uniquement',
-      'Code review par experts',
-      'Reconnaissance publique',
-      'Mentorat communautaire',
-    ],
-    guaranteesEn: [
-      'Professional projects only',
-      'Code review by experts',
-      'Public recognition',
-      'Community mentoring',
-    ],
-  },
-  networking: {
-    benefits: [
-      'Accès réseau clients premium',
-      'Projets innovants exclusifs',
-      'Événements tech privés',
-      'Workshops avec experts',
-      'Meetups développeurs',
-      'Conférences techniques',
-    ],
-    benefitsEn: [
-      'Access to premium client network',
-      'Exclusive innovative projects',
-      'Private tech events',
-      'Workshops with experts',
-      'Developer meetups',
-      'Technical conferences',
-    ],
-    stats: [
-      { label: 'Membres actifs', labelEn: 'Active members', value: '300+' },
-      { label: 'Événements/an', labelEn: 'Events/year', value: '50+' },
-      { label: 'Clients partenaires', labelEn: 'Partner clients', value: '100+' },
-    ],
-    guarantees: [
-      'Accès réseau exclusif',
-      'Événements premium',
-      'Networking facilité',
-      'Opportunités régulières',
-    ],
-    guaranteesEn: [
-      'Exclusive network access',
-      'Premium events',
-      'Facilitated networking',
-      'Regular opportunities',
-    ],
-  },
-}
-
-type ProgrammeDetail = (typeof programmeDetails)[keyof typeof programmeDetails]
 
 function ProgrammeDetailSection({
   programme,
@@ -445,7 +300,6 @@ function ProgrammeDetailSection({
 
 function Programmes() {
   const { language } = useLanguage()
-  const { elementRef: introRef, isVisible: introVisible } = useScrollAnimation({ threshold: 0.2 })
   const seo = getSEOData('/programmes', language)
 
   return (
@@ -456,56 +310,21 @@ function Programmes() {
         keywords={seo.keywords}
       />
     <div className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:pb-20 lg:px-8">
-      {/* Hero Section avec le même design que Home */}
-      <section
-        ref={introRef}
-        id="hero"
-        className="relative pt-4 pb-6 md:pt-6 md:pb-8 lg:pt-8 lg:pb-10 min-h-[450px] lg:min-h-[500px] xl:min-h-[550px] mb-20"
-        style={{ isolation: 'isolate' }}
-      >
-        {/* Modern Background with grid pattern and geometric shapes */}
-        <div 
-          className="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 overflow-hidden" 
-          style={{ zIndex: 0, willChange: 'transform' }}
-          aria-hidden="true"
-        >
-          {/* Subtle grid pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,122,255,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,122,255,0.15)_1px,transparent_1px)] bg-[size:40px_40px]" />
-          
-          {/* Geometric shapes - Same as Home */}
-          <div className="absolute top-20 right-20 h-32 w-32 rounded-2xl border-2 border-brand-300/70 animate-float-shape" style={{ animationDelay: '0s', willChange: 'transform' }} />
-          <div className="absolute bottom-32 left-16 h-24 w-24 rounded-full border-2 border-brand-300/65 animate-float-gentle animate-pulse-border" style={{ animationDelay: '1s', willChange: 'transform, opacity' }} />
-          <div className="absolute top-1/2 right-1/4 h-20 w-20 border-2 border-brand-300/60 animate-rotate-slow" style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', transformOrigin: 'center', animationDelay: '2s', willChange: 'transform' }} />
-          <div className="absolute top-40 left-1/3 h-16 w-16 rounded-lg border-2 border-accent-300/60 animate-float-shape" style={{ transform: 'rotate(-15deg)', animationDelay: '0.5s', willChange: 'transform' }} />
-          <div className="absolute bottom-40 right-1/3 h-12 w-12 rounded-full border-2 border-accent-300/55 animate-float-gentle animate-pulse-border" style={{ animationDelay: '1.5s', willChange: 'transform, opacity' }} />
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl text-center">
-            <div className={`mb-8 flex justify-center transition-all duration-800 ease-out ${introVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-8 opacity-0 scale-90'}`} style={{ transitionDelay: '150ms' }}>
-              <Badge variant="primary" icon={<RocketLaunchIcon className="h-4 w-4 animate-pulse" />}>
-                {language === 'fr' ? 'Programmes de Formation' : 'Training Programs'}
-              </Badge>
-            </div>
-            <h1 className={`mb-6 font-display text-4xl leading-[1.1] text-ink transition-all duration-1000 ease-out md:text-5xl lg:text-6xl ${introVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`} style={{ transitionDelay: '300ms' }}>
-              {language === 'fr' ? 'Nos Programmes de Développement' : 'Our Development Programs'}
-            </h1>
-            <p className={`mx-auto mb-4 max-w-3xl text-lg leading-relaxed text-neutral-700 transition-all duration-1000 ease-out md:text-xl ${introVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '450ms' }}>
-              {language === 'fr'
-                ? 'Rejoignez une communauté dynamique de développeurs passionnés et accédez à des programmes de formation d\'excellence.'
-                : 'Join a dynamic community of passionate developers and access excellence training programs.'}
-            </p>
-
-            {/* Description enriched */}
-            <p className={`mx-auto mb-6 max-w-2xl text-base leading-relaxed text-neutral-600 transition-all duration-1000 ease-out ${introVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '600ms' }}>
-              {language === 'fr'
-                ? 'Que vous soyez freelance, étudiant ou développeur open source, découvrez des opportunités qui transforment votre carrière. Formation pratique, mentorat personnalisé et accompagnement professionnel pour votre réussite.'
-                : 'Whether you\'re a freelancer, student or open source developer, discover opportunities that transform your career. Practical training, personalized mentoring and professional support for your success.'}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        badge={language === 'fr' ? 'Programmes de Formation' : 'Training Programs'}
+        badgeIcon={<RocketLaunchIcon className="h-4 w-4 animate-pulse" />}
+        title={language === 'fr' ? 'Nos Programmes de Développement' : 'Our Development Programs'}
+        subtitle={
+          language === 'fr'
+            ? 'Rejoignez une communauté dynamique de développeurs passionnés et accédez à des programmes de formation d\'excellence.'
+            : 'Join a dynamic community of passionate developers and access excellence training programs.'
+        }
+        description={
+          language === 'fr'
+            ? 'Que vous soyez freelance, étudiant ou développeur open source, découvrez des opportunités qui transforment votre carrière. Formation pratique, mentorat personnalisé et accompagnement professionnel pour votre réussite.'
+            : 'Whether you\'re a freelancer, student or open source developer, discover opportunities that transform your career. Practical training, personalized mentoring and professional support for your success.'
+        }
+      />
 
       {/* Programmes avec animations */}
       <div className="space-y-32">

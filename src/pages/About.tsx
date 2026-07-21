@@ -1,5 +1,6 @@
 import { useLanguage } from '../contexts/LanguageContext'
 import { companyInfo, valeurs } from '../data/siteContent'
+import { getAboutHistory } from '../data/aboutContent'
 import SEO from '../components/SEO'
 import { getSEOData } from '../data/seoData'
 import {
@@ -16,14 +17,11 @@ import {
   AcademicCapIcon,
   UserGroupIcon,
   BriefcaseIcon,
-  LightBulbIcon,
-  StarIcon,
-  FireIcon,
 } from '@heroicons/react/24/outline'
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import benDjibrilPhoto from '../assets/people/ben-djibril-official-with-glass-nbg.png'
 import { OptimizedImage } from '../components/OptimizedImage'
-import { Badge } from '../components/ui/Badge'
+import { PageHero } from '../components/sections/PageHero'
 
 // Composant pour les milestones de l'histoire
 function HistoryMilestone({ milestone, index }: { milestone: any; index: number }) {
@@ -308,9 +306,9 @@ function GitHubIcon({ className }: { className?: string }) {
 
 function About() {
   const { language } = useLanguage()
-  const { elementRef: introRef, isVisible: introVisible } = useScrollAnimation({ threshold: 0.2 })
   const { elementRef: historyRef, isVisible: historyVisible } = useScrollAnimation({ threshold: 0.1 })
   const seo = getSEOData('/about', language)
+  const historyMilestones = getAboutHistory(language)
 
   // Liens sociaux de Ben Djibril
   const benDjibrilSocial = {
@@ -328,54 +326,21 @@ function About() {
         keywords={seo.keywords}
       />
     <div className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:pb-20 lg:px-8">
-      {/* Hero Section avec le même design que Home */}
-      <section
-        ref={introRef}
-        id="hero"
-        className="relative pt-4 pb-6 md:pt-6 md:pb-8 lg:pt-8 lg:pb-10 min-h-[450px] lg:min-h-[500px] xl:min-h-[550px] mb-20"
-        style={{ isolation: 'isolate' }}
-      >
-        {/* Modern Background with grid pattern and geometric shapes */}
-        <div 
-          className="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 overflow-hidden" 
-          style={{ zIndex: 0, willChange: 'transform' }}
-          aria-hidden="true"
-        >
-          {/* Subtle grid pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,122,255,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,122,255,0.15)_1px,transparent_1px)] bg-[size:40px_40px]" />
-          
-          {/* Geometric shapes - Same as Home */}
-          <div className="absolute top-20 right-20 h-32 w-32 rounded-2xl border-2 border-brand-300/70 animate-float-shape" style={{ animationDelay: '0s', willChange: 'transform' }} />
-          <div className="absolute bottom-32 left-16 h-24 w-24 rounded-full border-2 border-brand-300/65 animate-float-gentle animate-pulse-border" style={{ animationDelay: '1s', willChange: 'transform, opacity' }} />
-          <div className="absolute top-1/2 right-1/4 h-20 w-20 border-2 border-brand-300/60 animate-rotate-slow" style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', transformOrigin: 'center', animationDelay: '2s', willChange: 'transform' }} />
-          <div className="absolute top-40 left-1/3 h-16 w-16 rounded-lg border-2 border-accent-300/60 animate-float-shape" style={{ transform: 'rotate(-15deg)', animationDelay: '0.5s', willChange: 'transform' }} />
-          <div className="absolute bottom-40 right-1/3 h-12 w-12 rounded-full border-2 border-accent-300/55 animate-float-gentle animate-pulse-border" style={{ animationDelay: '1.5s', willChange: 'transform, opacity' }} />
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl text-center">
-            <div className={`mb-8 flex justify-center transition-all duration-800 ease-out ${introVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-8 opacity-0 scale-90'}`} style={{ transitionDelay: '150ms' }}>
-              <Badge variant="primary" icon={<SparklesIcon className="h-4 w-4 animate-pulse" />}>
-                {language === 'fr' ? 'À Propos de Nous' : 'About Us'}
-              </Badge>
-            </div>
-            <h1 className={`mb-6 font-display text-4xl leading-[1.1] text-ink transition-all duration-1000 ease-out md:text-5xl lg:text-6xl ${introVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`} style={{ transitionDelay: '300ms' }}>
-              {language === 'fr' ? 'Notre Histoire' : 'Our Story'}
-            </h1>
-            <p className={`mx-auto mb-4 max-w-3xl text-lg leading-relaxed text-neutral-700 transition-all duration-1000 ease-out md:text-xl ${introVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '450ms' }}>
-              {language === 'fr'
-                ? 'Découvrez l\'histoire, les valeurs et la vision qui guident KOBE Corporation dans sa mission de transformation technologique et d\'innovation.'
-                : 'Discover the story, values and vision that guide KOBE Corporation in its mission of technological transformation and innovation.'}
-            </p>
-            <p className={`mx-auto mb-6 max-w-2xl text-base leading-relaxed text-neutral-600 transition-all duration-1000 ease-out ${introVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '600ms' }}>
-              {language === 'fr'
-                ? 'Nous sommes une entreprise passionnée par l\'excellence technologique et l\'accompagnement humain. Depuis notre création, nous nous engageons à créer des solutions qui transforment les entreprises et enrichissent les carrières des développeurs. Notre approche holistique combine expertise technique, vision stratégique et valeurs humaines pour livrer des résultats exceptionnels.'
-                : 'We are a company passionate about technological excellence and human support. Since our creation, we have been committed to creating solutions that transform businesses and enrich developers\' careers. Our holistic approach combines technical expertise, strategic vision and human values to deliver exceptional results.'}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        badge={language === 'fr' ? 'À Propos de Nous' : 'About Us'}
+        badgeIcon={<SparklesIcon className="h-4 w-4 animate-pulse" />}
+        title={language === 'fr' ? 'Notre Histoire' : 'Our Story'}
+        subtitle={
+          language === 'fr'
+            ? 'Découvrez l\'histoire, les valeurs et la vision qui guident KOBE Corporation dans sa mission de transformation technologique et d\'innovation.'
+            : 'Discover the story, values and vision that guide KOBE Corporation in its mission of technological transformation and innovation.'
+        }
+        description={
+          language === 'fr'
+            ? 'Nous sommes une entreprise passionnée par l\'excellence technologique et l\'accompagnement humain. Depuis notre création, nous nous engageons à créer des solutions qui transforment les entreprises et enrichissent les carrières des développeurs. Notre approche holistique combine expertise technique, vision stratégique et valeurs humaines pour livrer des résultats exceptionnels.'
+            : 'We are a company passionate about technological excellence and human support. Since our creation, we have been committed to creating solutions that transform businesses and enrich developers\' careers. Our holistic approach combines technical expertise, strategic vision and human values to deliver exceptional results.'
+        }
+      />
 
       {/* Histoire avec timeline verticale responsive */}
       <section id="story" className="mb-24">
@@ -408,52 +373,7 @@ function About() {
 
           {/* Étapes de la timeline */}
           <div className="space-y-8 lg:space-y-16">
-            {[
-              {
-                year: companyInfo.year,
-                icon: <LightBulbIcon className="h-8 w-8" />,
-                title: language === 'fr' ? 'La Vision' : 'The Vision',
-                description:
-                  language === 'fr'
-                    ? `${companyInfo.founder} crée KOBE Corporation avec l'ambition de transformer l'écosystème technologique africain. Contrairement aux entreprises traditionnelles, nous ne nous contentons pas de développer des logiciels : nous construisons un pont entre les talents locaux et les opportunités mondiales.`
-                    : `${companyInfo.founder} creates KOBE Corporation with the ambition to transform the African technology ecosystem. Unlike traditional companies, we don't just develop software: we build a bridge between local talent and global opportunities.`,
-                bgColor: 'bg-yellow-50',
-                iconColor: 'text-yellow-600',
-              },
-              {
-                year: '2024',
-                icon: <RocketLaunchIcon className="h-8 w-8" />,
-                title: language === 'fr' ? 'Le Lancement' : 'The Launch',
-                description:
-                  language === 'fr'
-                    ? 'Développement de solutions logicielles de classe mondiale et création des premiers programmes pour les talents locaux. Nous avons commencé à opérer depuis Yaoundé, au Cameroun, avec une compréhension profonde du marché africain tout en respectant les standards internationaux.'
-                    : 'Development of world-class software solutions and creation of the first programs for local talent. We started operating from Yaoundé, Cameroon, with a deep understanding of the African market while respecting international standards.',
-                bgColor: 'bg-blue-50',
-                iconColor: 'text-blue-600',
-              },
-              {
-                year: '2024-2025',
-                icon: <StarIcon className="h-8 w-8" />,
-                title: language === 'fr' ? 'L\'Expansion' : 'The Expansion',
-                description:
-                  language === 'fr'
-                    ? 'Création de quatre programmes uniques qui transforment la façon dont les développeurs africains travaillent : un cadre légal pour les freelances, des stages sur de vrais projets en production pour les étudiants, une communauté open source active, et un réseau de networking qui grandit avec nous.'
-                    : 'Creation of four unique programs that transform how African developers work: a legal framework for freelancers, internships on real production projects for students, an active open source community, and a networking network that grows with us.',
-                bgColor: 'bg-purple-50',
-                iconColor: 'text-purple-600',
-              },
-              {
-                year: 'Aujourd\'hui',
-                icon: <FireIcon className="h-8 w-8" />,
-                title: language === 'fr' ? 'L\'Impact' : 'The Impact',
-                description:
-                  language === 'fr'
-                    ? 'Notre modèle d\'affaires unique combine développement logiciel, hébergement cloud, formation professionnelle et accompagnement communautaire - une approche holistique que peu d\'entreprises offrent. Chaque programme est conçu pour créer des opportunités réelles et mesurables.'
-                    : 'Our unique business model combines software development, cloud hosting, professional training and community support - a holistic approach that few companies offer. Each program is designed to create real and measurable opportunities.',
-                bgColor: 'bg-red-50',
-                iconColor: 'text-red-600',
-              },
-            ].map((milestone, index) => (
+            {historyMilestones.map((milestone, index) => (
               <HistoryMilestone key={index} milestone={milestone} index={index} />
             ))}
           </div>

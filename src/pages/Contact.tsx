@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import SEO from '../components/SEO'
 import { getSEOData } from '../data/seoData'
+import { getContactFaqs, type FAQEntry } from '../data/contactFaqs'
 import { companyInfo, contactInfo } from '../data/siteContent'
 import {
   PaperClipIcon,
@@ -15,7 +16,7 @@ import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import { WhatsAppIcon, FacebookIcon, LinkedInIcon, InstagramIcon } from '../components/icons/SocialIcons'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
-import { Badge } from '../components/ui/Badge'
+import { PageHero } from '../components/sections/PageHero'
 
 // Composant pour les informations de contact
 function ContactInfoCard({ info, index, language }: { info: any; index: number; language: 'fr' | 'en' }) {
@@ -125,86 +126,6 @@ function FAQItem({ faq, index, isOpen, onToggle }: { faq: { question: string; an
   )
 }
 
-// Composant FAQ avec accordéon
-type FAQEntry = { question: string; answer: string }
-
-function getContactFaqs(language: 'fr' | 'en'): FAQEntry[] {
-  return [
-    {
-      question: language === 'fr'
-        ? 'Où puis-je consulter tous les détails des forfaits SaaS ?'
-        : 'Where can I find full details about SaaS plans?',
-      answer: language === 'fr'
-        ? 'Vous pouvez consulter la page dédiée https://pricing.kobecorporation.com pour voir les fonctionnalités complètes, les options et les conditions des forfaits Pro, Good Deal et Ultra.'
-        : 'You can visit https://pricing.kobecorporation.com to view full features, options and terms for Pro, Good Deal and Ultra plans.',
-    },
-    {
-      question: language === 'fr' 
-        ? 'Quel est votre délai de réponse ?'
-        : 'What is your response time?',
-      answer: language === 'fr'
-        ? 'Nous répondons généralement sous 24 heures maximum, même les weekends. Pour les urgences, nous avons un support 24/7 disponible.'
-        : 'We usually respond within 24 hours maximum, even on weekends. For emergencies, we have 24/7 support available.',
-    },
-    {
-      question: language === 'fr'
-        ? 'Proposez-vous des consultations gratuites ?'
-        : 'Do you offer free consultations?',
-      answer: language === 'fr'
-        ? 'Oui, la première consultation pour analyser votre projet et discuter de vos besoins est entièrement gratuite. C\'est l\'occasion de découvrir comment nous pouvons vous aider.'
-        : 'Yes, the first consultation to analyze your project and discuss your needs is completely free. It\'s an opportunity to discover how we can help you.',
-    },
-    {
-      question: language === 'fr'
-        ? 'Quels sont vos tarifs ?'
-        : 'What are your rates?',
-      answer: language === 'fr'
-        ? 'Nos tarifs varient selon le type de projet et sa complexité. Nous proposons des budgets adaptés aux particuliers, PME et grandes entreprises. Contactez-nous pour un devis personnalisé gratuit.'
-        : 'Our rates vary depending on the type of project and its complexity. We offer budgets adapted to individuals, SMEs and large enterprises. Contact us for a free personalized quote.',
-    },
-    {
-      question: language === 'fr'
-        ? 'Travaillez-vous avec des clients internationaux ?'
-        : 'Do you work with international clients?',
-      answer: language === 'fr'
-        ? 'Absolument ! Nous travaillons avec des clients du monde entier. Notre équipe est habituée aux projets à distance et nous utilisons les meilleurs outils de collaboration pour garantir une communication fluide.'
-        : 'Absolutely! We work with clients from around the world. Our team is used to remote projects and we use the best collaboration tools to ensure smooth communication.',
-    },
-    {
-      question: language === 'fr'
-        ? 'Quelle est votre garantie sur les projets ?'
-        : 'What is your guarantee on projects?',
-      answer: language === 'fr'
-        ? 'Nous garantissons la qualité de notre code avec des tests automatisés (90%+ coverage), code review systématique et documentation complète. Nous offrons également 6 mois de support post-lancement inclus.'
-        : 'We guarantee the quality of our code with automated tests (90%+ coverage), systematic code review and complete documentation. We also offer 6 months of post-launch support included.',
-    },
-    {
-      question: language === 'fr'
-        ? 'Proposez-vous des formations ?'
-        : 'Do you offer training?',
-      answer: language === 'fr'
-        ? 'Oui ! Nous proposons des bootcamps intensifs, formations en entreprise et mentorat individuel. Nos programmes couvrent le développement web, mobile, DevOps, cybersécurité et bien plus.'
-        : 'Yes! We offer intensive bootcamps, corporate training and individual mentoring. Our programs cover web development, mobile, DevOps, cybersecurity and much more.',
-    },
-    {
-      question: language === 'fr'
-        ? 'Comment fonctionne le processus de développement ?'
-        : 'How does the development process work?',
-      answer: language === 'fr'
-        ? 'Notre processus suit 5 étapes : Découverte (analyse des besoins), Planification (scope et timeline), Développement (avec code review et tests), Déploiement (mise en production) et Support (accompagnement continu).'
-        : 'Our process follows 5 steps: Discovery (needs analysis), Planning (scope and timeline), Development (with code review and tests), Deployment (production) and Support (continuous support).',
-    },
-    {
-      question: language === 'fr'
-        ? 'Quels modes de paiement acceptez-vous ?'
-        : 'What payment methods do you accept?',
-      answer: language === 'fr'
-        ? 'Nous acceptons les virements bancaires, Mobile Money (Orange Money, MTN Mobile Money), PayPal et les cartes bancaires. Les paiements peuvent être échelonnés selon le projet.'
-        : 'We accept bank transfers, Mobile Money (Orange Money, MTN Mobile Money), PayPal and bank cards. Payments can be spread out according to the project.',
-    },
-  ]
-}
-
 function FAQAccordion({ faqs }: { faqs: FAQEntry[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
@@ -229,7 +150,6 @@ function FAQAccordion({ faqs }: { faqs: FAQEntry[] }) {
 
 function Contact() {
   const { language } = useLanguage()
-  const { elementRef: introRef, isVisible: introVisible } = useScrollAnimation({ threshold: 0.2 })
   const seo = getSEOData('/contact', language)
   const faqs = getContactFaqs(language)
   const contactStructuredData = [
@@ -326,54 +246,21 @@ function Contact() {
         structuredData={contactStructuredData}
       />
     <div className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:pb-20 lg:px-8">
-      {/* Hero Section avec le même design que Home */}
-      <section
-        ref={introRef}
-        id="hero"
-        className="relative pt-4 pb-6 md:pt-6 md:pb-8 lg:pt-8 lg:pb-10 min-h-[450px] lg:min-h-[500px] xl:min-h-[550px] mb-20"
-        style={{ isolation: 'isolate' }}
-      >
-        {/* Modern Background with grid pattern and geometric shapes */}
-        <div 
-          className="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 overflow-hidden" 
-          style={{ zIndex: 0, willChange: 'transform' }}
-          aria-hidden="true"
-        >
-          {/* Subtle grid pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,122,255,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,122,255,0.15)_1px,transparent_1px)] bg-[size:40px_40px]" />
-          
-          {/* Geometric shapes - Same as Home */}
-          <div className="absolute top-20 right-20 h-32 w-32 rounded-2xl border-2 border-brand-300/70 animate-float-shape" style={{ animationDelay: '0s', willChange: 'transform' }} />
-          <div className="absolute bottom-32 left-16 h-24 w-24 rounded-full border-2 border-brand-300/65 animate-float-gentle animate-pulse-border" style={{ animationDelay: '1s', willChange: 'transform, opacity' }} />
-          <div className="absolute top-1/2 right-1/4 h-20 w-20 border-2 border-brand-300/60 animate-rotate-slow" style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', transformOrigin: 'center', animationDelay: '2s', willChange: 'transform' }} />
-          <div className="absolute top-40 left-1/3 h-16 w-16 rounded-lg border-2 border-accent-300/60 animate-float-shape" style={{ transform: 'rotate(-15deg)', animationDelay: '0.5s', willChange: 'transform' }} />
-          <div className="absolute bottom-40 right-1/3 h-12 w-12 rounded-full border-2 border-accent-300/55 animate-float-gentle animate-pulse-border" style={{ animationDelay: '1.5s', willChange: 'transform, opacity' }} />
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl text-center">
-            <div className={`mb-8 flex justify-center transition-all duration-800 ease-out ${introVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-8 opacity-0 scale-90'}`} style={{ transitionDelay: '150ms' }}>
-              <Badge variant="primary" icon={<RocketLaunchIcon className="h-4 w-4 animate-pulse" />}>
-                {language === 'fr' ? 'Contactez-Nous' : 'Contact Us'}
-              </Badge>
-            </div>
-            <h1 className={`mb-6 font-display text-4xl leading-[1.1] text-ink transition-all duration-1000 ease-out md:text-5xl lg:text-6xl ${introVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`} style={{ transitionDelay: '300ms' }}>
-              {language === 'fr' ? 'Contactez-Nous' : 'Contact Us'}
-            </h1>
-            <p className={`mx-auto mb-4 max-w-3xl text-lg leading-relaxed text-neutral-700 transition-all duration-1000 ease-out md:text-xl ${introVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '450ms' }}>
-              {language === 'fr'
-                ? 'Nous sommes disponibles 24/7 pour répondre à vos besoins et transformer vos idées en réalité.'
-                : 'We are available 24/7 to meet your needs and transform your ideas into reality.'}
-            </p>
-            <p className={`mx-auto mb-6 max-w-2xl text-base leading-relaxed text-neutral-600 transition-all duration-1000 ease-out ${introVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '600ms' }}>
-              {language === 'fr'
-                ? 'Discutons de votre projet, explorons vos besoins et découvrons ensemble comment nous pouvons vous accompagner vers le succès. Notre équipe d\'experts est prête à écouter vos défis et à proposer des solutions sur mesure qui correspondent à vos objectifs.'
-                : 'Let\'s discuss your project, explore your needs and discover together how we can support you towards success. Our team of experts is ready to listen to your challenges and propose tailor-made solutions that match your objectives.'}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        badge={language === 'fr' ? 'Contactez-Nous' : 'Contact Us'}
+        badgeIcon={<RocketLaunchIcon className="h-4 w-4 animate-pulse" />}
+        title={language === 'fr' ? 'Contactez-Nous' : 'Contact Us'}
+        subtitle={
+          language === 'fr'
+            ? 'Nous sommes disponibles 24/7 pour répondre à vos besoins et transformer vos idées en réalité.'
+            : 'We are available 24/7 to meet your needs and transform your ideas into reality.'
+        }
+        description={
+          language === 'fr'
+            ? 'Discutons de votre projet, explorons vos besoins et découvrons ensemble comment nous pouvons vous accompagner vers le succès. Notre équipe d\'experts est prête à écouter vos défis et à proposer des solutions sur mesure qui correspondent à vos objectifs.'
+            : 'Let\'s discuss your project, explore your needs and discover together how we can support you towards success. Our team of experts is ready to listen to your challenges and propose tailor-made solutions that match your objectives.'
+        }
+      />
 
       {/* Layout principal : Formulaire + Informations */}
       <div className="grid gap-12 lg:grid-cols-3 mb-16">
