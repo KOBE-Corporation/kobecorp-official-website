@@ -48,7 +48,7 @@ function AppContent() {
       <PageLoader isLoading={isNavigating} />
       <ScrollToTop />
       <Header />
-      <main className={`flex-1 transition-opacity duration-300 ${isNavigating ? 'opacity-[0.985]' : 'opacity-100'}`}>
+      <main className={`flex-1 bg-gradient-to-br from-transparent via-brand-50/20 to-transparent transition-opacity duration-300 ${isNavigating ? 'opacity-[0.985]' : 'opacity-100'}`}>
         <Suspense fallback={
           <div className="pointer-events-none fixed inset-0 z-[95] flex items-center justify-center bg-gradient-to-b from-white/55 via-white/35 to-white/55 backdrop-blur-[1px]">
             <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/70 bg-white/80 px-6 py-5 shadow-soft">

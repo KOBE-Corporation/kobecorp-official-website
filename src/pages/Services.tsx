@@ -261,17 +261,17 @@ function Services() {
         keywords={seo.keywords}
         structuredData={servicesStructuredData}
       />
-    <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 md:py-20 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:pb-20 lg:px-8">
       {/* Hero Section avec le même design que Home */}
       <section
         ref={introRef}
         id="hero"
-        className="relative overflow-hidden pt-4 pb-6 md:pt-6 md:pb-8 lg:pt-8 lg:pb-10 min-h-[450px] lg:min-h-[500px] xl:min-h-[550px] mb-20"
+        className="relative pt-4 pb-6 md:pt-6 md:pb-8 lg:pt-8 lg:pb-10 min-h-[450px] lg:min-h-[500px] xl:min-h-[550px] mb-20"
         style={{ isolation: 'isolate' }}
       >
         {/* Modern Background with grid pattern and geometric shapes */}
         <div 
-          className="absolute inset-0 overflow-hidden bg-white" 
+          className="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 overflow-hidden" 
           style={{ 
             zIndex: 0,
             willChange: 'transform',
@@ -314,8 +314,6 @@ function Services() {
             style={{ animationDelay: '1.5s', willChange: 'transform, opacity' }} 
           />
           
-          {/* Subtle gradient overlay for depth */}
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-brand-50/20 to-transparent" />
         </div>
 
         {/* Centered Content Container */}

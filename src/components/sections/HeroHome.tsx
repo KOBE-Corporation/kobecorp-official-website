@@ -14,12 +14,12 @@ function HeroHome() {
     <section
       ref={elementRef}
       id="hero"
-      className="relative overflow-hidden pt-4 pb-8 md:pt-6 md:pb-12 lg:pt-8 lg:pb-16 min-h-[600px] lg:min-h-[700px] xl:min-h-[800px]"
+      className="relative pt-4 pb-8 md:pt-6 md:pb-12 lg:pt-8 lg:pb-16 min-h-[600px] lg:min-h-[700px] xl:min-h-[800px]"
       style={{ isolation: 'isolate' }}
     >
       {/* Modern Background with grid pattern and geometric shapes */}
       <div 
-        className="absolute inset-0 overflow-hidden bg-white" 
+        className="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 overflow-hidden" 
         style={{ 
           zIndex: 0,
           willChange: 'transform',
@@ -75,8 +75,6 @@ function HeroHome() {
           }} 
         />
         
-        {/* Subtle gradient overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-brand-50/20 to-transparent" />
       </div>
 
       {/* Centered Content Container */}

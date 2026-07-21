@@ -84,13 +84,6 @@ export function NavigationMenu({ items, className = '' }: NavigationMenuProps) {
     e.preventDefault()
     e.stopPropagation()
 
-    // Pour la page Services, un clic principal renvoie toujours vers #hero
-    // afin d'éviter de rester bloqué sur une sous-section comme #forfait-saas.
-    if (item.path === '/services') {
-      handleNavClick(e, '/services', 'hero')
-      return
-    }
-    
     // Si l'item a des sections, toggle le dropdown
     if (item.sections && item.sections.length > 0) {
       setOpenDropdown(openDropdown === item.path ? null : item.path)
