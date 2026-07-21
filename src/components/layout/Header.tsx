@@ -66,7 +66,7 @@ const Header = memo(function Header() {
             className="flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-subtle transition-all duration-200 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-brand-500/20 group"
             aria-label={language === 'fr' ? 'Switch to English' : 'Passer en français'}
           >
-            <GlobeAltIcon className="h-4 w-4 text-neutral-600 transition-colors duration-300 group-hover:text-brand-500" />
+            <LanguageFlag language={language} className="h-3.5 w-[1.15rem]" />
             <span className="uppercase text-neutral-700 group-hover:text-brand-600">{language}</span>
           </button>
 
@@ -88,10 +88,11 @@ const Header = memo(function Header() {
           {/* Language Switcher Mobile */}
           <button
             onClick={toggleLanguage}
-            className="flex items-center justify-center rounded-full border border-neutral-200 bg-white p-2 text-neutral-700 shadow-subtle transition-all duration-200 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-brand-500/20 group"
+            className="flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-2 text-xs font-semibold text-neutral-700 shadow-subtle transition-all duration-200 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-brand-500/20 group"
             aria-label={language === 'fr' ? 'Switch to English' : 'Passer en français'}
           >
-            <GlobeAltIcon className="h-5 w-5 text-neutral-600 transition-colors duration-300 group-hover:text-brand-500" />
+            <LanguageFlag language={language} className="h-3.5 w-[1.15rem]" />
+            <span className="uppercase text-neutral-700 group-hover:text-brand-600">{language}</span>
           </button>
 
           {/* Mobile Menu Button */}
