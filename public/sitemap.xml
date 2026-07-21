@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
@@ -10,7 +10,7 @@
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en" />
   </url>
   <url>
     <loc>https://www.kobecorporation.com/en</loc>
@@ -19,7 +19,7 @@
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en" />
   </url>
 
   <!-- Services -->
@@ -30,7 +30,7 @@
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/services" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/services" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/services" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/services" />
   </url>
   <url>
     <loc>https://www.kobecorporation.com/en/services</loc>
@@ -39,7 +39,7 @@
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/services" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/services" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/services" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/services" />
   </url>
 
   <!-- Programmes -->
@@ -50,7 +50,7 @@
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/programmes" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/programmes" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/programmes" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/programmes" />
   </url>
   <url>
     <loc>https://www.kobecorporation.com/en/programmes</loc>
@@ -59,7 +59,7 @@
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/programmes" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/programmes" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/programmes" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/programmes" />
   </url>
 
   <!-- À propos -->
@@ -70,7 +70,7 @@
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/about" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/about" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/about" />
   </url>
   <url>
     <loc>https://www.kobecorporation.com/en/about</loc>
@@ -79,7 +79,7 @@
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/about" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/about" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/about" />
   </url>
 
   <!-- Portfolio -->
@@ -90,7 +90,7 @@
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/portfolio" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/portfolio" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/portfolio" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/portfolio" />
   </url>
   <url>
     <loc>https://www.kobecorporation.com/en/portfolio</loc>
@@ -99,7 +99,7 @@
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/portfolio" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/portfolio" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/portfolio" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/portfolio" />
   </url>
 
   <!-- Contact -->
@@ -110,7 +110,7 @@
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/contact" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/contact" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/contact" />
   </url>
   <url>
     <loc>https://www.kobecorporation.com/en/contact</loc>
@@ -119,7 +119,7 @@
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/contact" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/contact" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/contact" />
   </url>
 
   <!-- Privacy -->
@@ -130,7 +130,7 @@
     <priority>0.3</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/privacy" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/privacy" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/privacy" />
   </url>
   <url>
     <loc>https://www.kobecorporation.com/en/privacy</loc>
@@ -139,7 +139,7 @@
     <priority>0.3</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/privacy" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/privacy" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/privacy" />
   </url>
 
   <!-- Legal -->
@@ -150,7 +150,7 @@
     <priority>0.3</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/legal" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/legal" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/legal" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/legal" />
   </url>
   <url>
     <loc>https://www.kobecorporation.com/en/legal</loc>
@@ -159,7 +159,7 @@
     <priority>0.3</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/legal" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/legal" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/legal" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/legal" />
   </url>
 
   <!-- Terms -->
@@ -170,7 +170,7 @@
     <priority>0.3</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/terms" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/terms" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/terms" />
   </url>
   <url>
     <loc>https://www.kobecorporation.com/en/terms</loc>
@@ -179,7 +179,7 @@
     <priority>0.3</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.kobecorporation.com/fr/terms" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.kobecorporation.com/en/terms" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/fr/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kobecorporation.com/en/terms" />
   </url>
 
 </urlset>

@@ -1,7 +1,7 @@
 import type { Language } from './i18n'
 
 export const SUPPORTED_LOCALES: Language[] = ['fr', 'en']
-export const DEFAULT_LOCALE: Language = 'fr'
+export const DEFAULT_LOCALE: Language = 'en'
 
 export function isSupportedLocale(value: string | undefined | null): value is Language {
   return value === 'fr' || value === 'en'
@@ -51,18 +51,13 @@ export function switchLocaleInPath(
   return `${localizePath(cleanPath, newLocale)}${search}${hash}`
 }
 
-/** Langue préférée : localStorage → navigateur → défaut */
+/** Langue préférée : localStorage si choisi, sinon anglais par défaut */
 export function getPreferredLocale(): Language {
   try {
     const saved = localStorage.getItem('kobe-language')
     if (isSupportedLocale(saved)) return saved
   } catch {
     // ignore
-  }
-
-  if (typeof navigator !== 'undefined') {
-    const browserLang = navigator.language.split('-')[0]
-    if (isSupportedLocale(browserLang)) return browserLang
   }
 
   return DEFAULT_LOCALE

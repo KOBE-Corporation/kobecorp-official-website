@@ -144,7 +144,7 @@ function SEO({
           }
           link.setAttribute('href', href)
         })
-        const defaultHref = `${baseUrl}${localizePath(pathWithoutLocale, 'fr')}`
+        const defaultHref = `${baseUrl}${localizePath(pathWithoutLocale, 'en')}`
         let xDefault = document.querySelector('link[rel="alternate"][hreflang="x-default"]')
         if (!xDefault) {
           xDefault = document.createElement('link')
