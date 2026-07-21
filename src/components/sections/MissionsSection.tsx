@@ -1,124 +1,164 @@
-import { CheckBadgeIcon, ShieldCheckIcon, SparklesIcon } from '@heroicons/react/24/outline'
+import {
+  CheckBadgeIcon,
+  ShieldCheckIcon,
+  SparklesIcon,
+  ArrowRightIcon,
+} from '@heroicons/react/24/outline'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useScrollAnimation } from '../../hooks/useScrollAnimation'
-import { Card } from '../ui/Card'
+import { Button } from '../ui/Button'
 
 function MissionsSection() {
   const { language } = useLanguage()
   const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.2 })
 
+  const missions = [
+    {
+      icon: ShieldCheckIcon,
+      title: language === 'fr' ? 'Sécuriser' : 'Secure',
+      text:
+        language === 'fr'
+          ? 'Protéger vos opérations critiques et réduire les risques techniques.'
+          : 'Protect your critical operations and reduce technical risks.',
+    },
+    {
+      icon: SparklesIcon,
+      title: language === 'fr' ? 'Moderniser' : 'Modernize',
+      text:
+        language === 'fr'
+          ? 'Offrir à vos équipes des outils fluides, utiles et durables.'
+          : 'Give your teams smooth, useful and lasting tools.',
+    },
+    {
+      icon: CheckBadgeIcon,
+      title: language === 'fr' ? 'Mesurer' : 'Measure',
+      text:
+        language === 'fr'
+          ? 'Ancrer une culture d’amélioration continue basée sur l’impact.'
+          : 'Anchor a culture of continuous improvement driven by impact.',
+    },
+  ]
+
   return (
     <section
-      id="missions"
       ref={elementRef}
-      className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-card md:p-10"
+      className="relative overflow-hidden rounded-[2rem] border border-neutral-200/80 bg-white"
     >
-      <div className="grid gap-8 md:grid-cols-[1.1fr_0.9fr] md:items-center lg:gap-12">
+      {/* Atmosphere légère sur toute la section */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(10,122,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,122,255,0.06)_1px,transparent_1px)] bg-[size:32px_32px]"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-brand-400/15 blur-3xl"
+        aria-hidden="true"
+      />
+
+      <div className="relative grid gap-10 p-8 md:grid-cols-2 md:items-stretch md:gap-0 md:p-0 lg:grid-cols-[1.05fr_0.95fr]">
+        {/* Colonne gauche */}
         <div
-          className={`space-y-3 transition-all duration-1000 ${
-            isVisible
-              ? 'translate-x-0 opacity-100'
-              : '-translate-x-8 opacity-0'
+          className={`flex flex-col justify-center space-y-8 md:p-10 lg:p-12 transition-all duration-1000 ${
+            isVisible ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'
           }`}
         >
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600">
-            {language === 'fr' ? 'Engagement' : 'Commitment'}
-          </p>
-          <h2 className="font-display text-3xl text-ink">
-            {language === 'fr' ? 'Nos missions prioritaires' : 'Our priority missions'}
-          </h2>
-          <p className="text-neutral-600">
-            {language === 'fr'
-              ? 'Donner du sens à vos projets en construisant des solutions robustes, inclusives et pérennes.'
-              : 'Give meaning to your projects by building robust, inclusive and sustainable solutions.'}
-          </p>
-          <ul className="space-y-3 text-neutral-700">
-            {[
-              {
-                icon: ShieldCheckIcon,
-                text: language === 'fr'
-                  ? 'Sécuriser vos opérations critiques et réduire les risques.'
-                  : 'Secure your critical operations and reduce risks.',
-              },
-              {
-                icon: SparklesIcon,
-                text: language === 'fr'
-                  ? 'Moderniser vos outils pour offrir une expérience fluide à vos équipes.'
-                  : 'Modernize your tools to offer a smooth experience to your teams.',
-              },
-              {
-                icon: CheckBadgeIcon,
-                text: language === 'fr'
-                  ? 'Mesurer l\'impact et ancrer une culture de l\'amélioration continue.'
-                  : 'Measure impact and anchor a culture of continuous improvement.',
-              },
-            ].map((mission, index) => {
+          <div className="space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">
+              {language === 'fr' ? 'Engagement' : 'Commitment'}
+            </p>
+            <h2 className="font-display text-3xl leading-tight text-ink md:text-4xl">
+              {language === 'fr' ? 'Nos missions prioritaires' : 'Our priority missions'}
+            </h2>
+            <p className="max-w-md text-base leading-relaxed text-neutral-600">
+              {language === 'fr'
+                ? 'Donner du sens à vos projets en construisant des solutions robustes, inclusives et pérennes.'
+                : 'Give meaning to your projects by building robust, inclusive and lasting solutions.'}
+            </p>
+          </div>
+
+          <ul className="space-y-4">
+            {missions.map((mission, index) => {
               const Icon = mission.icon
               return (
                 <li
-                  key={index}
-                  className={`flex items-start gap-3 transition-all duration-700 ${
-                    isVisible
-                      ? 'translate-x-0 opacity-100'
-                      : '-translate-x-8 opacity-0'
+                  key={mission.title}
+                  className={`group/item flex gap-4 rounded-2xl border border-transparent bg-transparent p-3 transition-all duration-500 hover:border-brand-100 hover:bg-brand-50/50 ${
+                    isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
                   }`}
-                  style={{
-                    transitionDelay: `${(index + 1) * 200}ms`,
-                  }}
+                  style={{ transitionDelay: `${180 + index * 120}ms` }}
                 >
-                  <Icon className="mt-1 h-5 w-5 flex-shrink-0 text-brand-500 transition-all duration-300 group-hover:scale-110" />
-                  <span>{mission.text}</span>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover/item:bg-brand-500 group-hover/item:text-white">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block font-display text-base font-semibold text-ink">
+                      {mission.title}
+                    </span>
+                    <span className="mt-0.5 block text-sm leading-relaxed text-neutral-600">
+                      {mission.text}
+                    </span>
+                  </span>
                 </li>
               )
             })}
           </ul>
         </div>
-        <Card
-          elevation="lg"
-          className={`group relative overflow-hidden px-8 py-10 text-white transition-all duration-1000 ${
-            isVisible
-              ? 'translate-x-0 opacity-100 scale-100'
-              : 'translate-x-8 opacity-0 scale-95'
+
+        {/* Panneau « Pourquoi KOBE » */}
+        <div
+          className={`relative overflow-hidden bg-brand-600 text-white md:min-h-[420px] transition-all duration-1000 ${
+            isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
           }`}
+          style={{ transitionDelay: '200ms' }}
         >
-          {/* Modern dark gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-neutral-800 via-neutral-700 to-neutral-900" />
-          
-          {/* Decorative overlay with subtle brand accent */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-brand-500/5 via-transparent to-accent-500/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-          
-          {/* Subtle pattern overlay */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_rgba(255,255,255,0.08)_1px,_transparent_0)] bg-[size:24px_24px] opacity-40" />
-          
-          {/* Content */}
-          <div className="relative z-10 space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="relative h-1.5 w-12 overflow-hidden rounded-full bg-white/30 transition-all duration-500 group-hover:w-16">
-                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+          {/* Fond expressif */}
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-500 via-brand-600 to-brand-800" />
+          <div
+            className="absolute -right-16 top-10 h-48 w-48 rounded-full border border-white/20"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-accent-500/25 blur-2xl"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute right-10 bottom-16 h-16 w-16 rotate-12 rounded-2xl border-2 border-white/25"
+            aria-hidden="true"
+          />
+
+          <div className="relative z-10 flex h-full flex-col justify-between gap-10 p-8 md:p-10 lg:p-12">
+            <div className="space-y-5">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/90 backdrop-blur-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-400" />
+                {language === 'fr' ? 'Pourquoi KOBE' : 'Why KOBE'}
               </div>
-              <p className="font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300 group-hover:text-white">
-                {language === 'fr' ? 'Pourquoi KOBE Corporation' : 'Why KOBE Corporation'}
+
+              <h3 className="max-w-sm font-display text-2xl leading-snug md:text-3xl">
+                {language === 'fr'
+                  ? 'Vision stratégique, exécution terrain.'
+                  : 'Strategic vision, field execution.'}
+              </h3>
+
+              <p className="max-w-md text-base leading-relaxed text-white/85">
+                {language === 'fr'
+                  ? 'Un partenaire de confiance qui aligne ambition et livraison, avec un accompagnement humain et réactif à chaque étape.'
+                  : 'A trusted partner that aligns ambition and delivery, with human and responsive support at every step.'}
               </p>
             </div>
-            <p className="text-lg leading-relaxed text-white/95 transition-colors duration-300 group-hover:text-white">
-              {language === 'fr'
-                ? 'Un partenaire de confiance, capable d\'aligner vision stratégique et exécution terrain, avec un accompagnement humain et réactif.'
-                : 'A trusted partner, capable of aligning strategic vision and field execution, with human and responsive support.'}
-            </p>
-            {/* Statistiques masquées temporairement - entreprise en création */}
-            {/* <div className="grid gap-4 sm:grid-cols-2">
-              {chiffres.map((item, index) => (
-                <MissionStat
-                  key={index}
-                  item={item}
-                  isActive={isVisible}
-                  language={language}
-                  index={index}
-                />
-              ))}
-            </div> */}
+
+            <div className="space-y-4">
+              <Button
+                to="/contact"
+                variant="secondary"
+                size="md"
+                className="w-full justify-center border-0 bg-white text-brand-700 hover:bg-brand-50 hover:text-brand-800"
+                icon={<ArrowRightIcon className="h-4 w-4" />}
+                iconPosition="right"
+              >
+                {language === 'fr' ? 'Parler de votre projet' : 'Talk about your project'}
+              </Button>
+            </div>
           </div>
-        </Card>
+        </div>
       </div>
     </section>
   )
