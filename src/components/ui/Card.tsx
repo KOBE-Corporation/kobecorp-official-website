@@ -13,7 +13,7 @@ interface CardProps {
 export const Card = forwardRef<HTMLDivElement, CardProps>(({ 
   children, 
   className = '', 
-  hover = true,
+  hover = false,
   elevation = 'md',
   onClick,
   style

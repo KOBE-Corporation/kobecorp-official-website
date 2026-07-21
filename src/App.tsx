@@ -47,6 +47,11 @@ function LegacyRedirect({ path }: { path: string }) {
   )
 }
 
+function HomeLangRedirect() {
+  const { lang } = useParams<{ lang: string }>()
+  return <Navigate to={`/${lang || getPreferredLocale()}`} replace />
+}
+
 const localizedPages: Array<{ path: string; element: ReactNode }> = [
   { path: 'services', element: <Services /> },
   { path: 'programmes', element: <Programmes /> },
@@ -133,6 +138,15 @@ function AppContent() {
               />
             ))}
 
+            <Route
+              path="/:lang/home"
+              element={
+                <LocaleGuard>
+                  <HomeLangRedirect />
+                </LocaleGuard>
+              }
+            />
+
             {legacyPaths.map((path) => (
               <Route
                 key={path}
@@ -141,6 +155,14 @@ function AppContent() {
               />
             ))}
 
+            <Route
+              path="/:lang/*"
+              element={
+                <LocaleGuard>
+                  <NotFound />
+                </LocaleGuard>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

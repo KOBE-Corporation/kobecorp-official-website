@@ -56,19 +56,16 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
         // Vérifier que l'élément est rendu (a une hauteur)
         const isRendered = rect.height > 0 && rect.width > 0
         
-        // Vérifier que la page est scrollée au top (ou presque)
-        // Tolérance plus large pour détection plus rapide
-        const isAtTop = window.scrollY <= 150
-        
-        // Vérifier que le hero est visible (pas trop bas)
-        const isHeroVisible = rect.top <= 250
+        // Avec un hash, ne pas exiger d'être en haut de page
+        const hasHash = Boolean(window.location.hash)
+        const isAtTop = hasHash || window.scrollY <= 150
+        const isHeroVisible = hasHash || rect.top <= 250
         
         return isRendered && isAtTop && isHeroVisible
       } else {
-        // Si pas de section hero, vérifier juste que la page est en haut
-        // et que le main a du contenu
         const mainHasContent = main.children.length > 0
-        const isAtTop = window.scrollY <= 150
+        const hasHash = Boolean(window.location.hash)
+        const isAtTop = hasHash || window.scrollY <= 150
         
         return mainHasContent && isAtTop
       }

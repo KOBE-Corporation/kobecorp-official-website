@@ -28,10 +28,10 @@ const canUseStorage = (): boolean => {
         const parsed = JSON.parse(prefs)
         return parsed.preferences === true
       } catch {
-        return true
+        return false
       }
     }
-    return true
+    return false
   } catch {
     return false
   }

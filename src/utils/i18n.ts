@@ -15,6 +15,7 @@ export const translations = {
       startProject: 'Démarrer un Projet',
       chatWithBen: 'Discuter avec Ben Djibril',
       overview: 'Vue d\'ensemble',
+      showSections: 'Afficher les sections',
     },
     // Home Page
     home: {
@@ -133,9 +134,9 @@ export const translations = {
       available247: 'Disponible 24/7',
       copyright: '© 2025 KOBE Corporation. Tous droits réservés.',
       legal: {
-        privacy: 'Mentions légales',
-        terms: 'Politique de confidentialité',
-        cookies: 'Conditions d\'utilisation',
+        privacy: 'Politique de confidentialité',
+        terms: 'Mentions légales',
+        cookies: 'Cookies',
       },
     },
   },
@@ -151,6 +152,7 @@ export const translations = {
       startProject: 'Start a Project',
       chatWithBen: 'Chat with Ben Djibril',
       overview: 'Overview',
+      showSections: 'Show sections',
     },
     // Home Page
     home: {
@@ -269,9 +271,9 @@ export const translations = {
       available247: 'Available 24/7',
       copyright: '© 2025 KOBE Corporation. All rights reserved.',
       legal: {
-        privacy: 'Legal notices',
-        terms: 'Privacy policy',
-        cookies: 'Terms of use',
+        privacy: 'Privacy policy',
+        terms: 'Legal notices',
+        cookies: 'Cookies',
       },
     },
   },

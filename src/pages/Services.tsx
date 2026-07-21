@@ -41,6 +41,500 @@ const serviceImages = {
   ],
 }
 
+const sectionIdMap: Record<string, string> = {
+  'developpement-logiciel': 'development',
+  'hebergement-infrastructure': 'hosting',
+  'consultation-audit': 'consultation',
+  'formation-bootcamp': 'training',
+}
+
+function MethodologyStep({
+  step,
+  index,
+  language,
+}: {
+  step: (typeof process)[number]
+  index: number
+  language: 'fr' | 'en'
+}) {
+  const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.2 })
+  const isEven = index % 2 === 0
+
+  return (
+    <div
+      ref={elementRef}
+      className={`relative flex items-center ${
+        'justify-center lg:justify-start'
+      } ${!isEven ? 'lg:justify-end' : ''}`}
+    >
+      {/* Point de connexion - masqué sur mobile */}
+      <div
+        className={`absolute left-1/2 top-1/2 z-10 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white bg-brand-500 text-white shadow-lg transition-all duration-500 group-hover/step:scale-125 group-hover/step:rotate-180 lg:flex ${
+          isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+        }`}
+        style={{ transitionDelay: `${index * 100 + 500}ms` }}
+      >
+        <span className="font-display text-lg font-bold">{step.step}</span>
+      </div>
+
+      {/* Contenu */}
+      <Card
+        elevation="md"
+        className={`group relative w-full lg:w-[calc(50%-40px)] ${
+          isVisible
+            ? 'translate-y-0 opacity-100'
+            : 'translate-y-8 opacity-0'
+        }`}
+        style={{ transitionDelay: `${index * 150}ms` }}
+      >
+        <div className="relative">
+          <div className="mb-4 flex items-center gap-4">
+            {/* Badge numéro d'étape */}
+            <div className="relative">
+              <div className="absolute inset-0 rounded-2xl bg-brand-400/30 blur-xl opacity-0 transition-opacity duration-500 group-hover:opacity-50" />
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-500 text-white shadow-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-brand-600">
+                <span className="font-display text-2xl font-bold">{step.step}</span>
+              </div>
+            </div>
+            
+            <div className="flex-1">
+              <div className="mb-1 text-xs font-semibold uppercase tracking-wider text-brand-600">
+                {language === 'fr' ? 'Étape' : 'Step'} {step.step}
+              </div>
+              <h3 className="text-xl font-semibold text-ink transition-colors duration-300 group-hover:text-brand-600 md:text-2xl">
+                {language === 'fr' ? step.title : step.titleEn}
+              </h3>
+            </div>
+          </div>
+          
+          <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
+            {language === 'fr' ? step.description : step.descriptionEn}
+          </p>
+        </div>
+      </Card>
+    </div>
+  )
+}
+
+function ServiceDetailSection({
+  service,
+  detail,
+  images,
+  index,
+  language,
+}: {
+  service: (typeof services)[number]
+  detail: {
+    id: string
+    icon: React.ReactNode
+    title: string
+    description: string
+    sections?: Array<{ subtitle: string; content: string; icon: React.ReactNode }>
+    guarantees?: string[]
+    features?: string[]
+    plans?: Array<{ name: string; desc: string; features?: string[] }>
+    services?: string[]
+    deliverables?: string[]
+    programs?: string[]
+    formats?: string[]
+  }
+  images: string[]
+  index: number
+  language: 'fr' | 'en'
+}) {
+  const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.2 })
+  const sectionId = sectionIdMap[service.slug] || service.slug
+
+  return (
+    <section id={sectionId} ref={elementRef} className="scroll-mt-20">
+      <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
+        {/* Contenu avec animations variées */}
+        <div className={`space-y-8 transition-all duration-1000 ${
+          isVisible
+            ? 'translate-x-0 opacity-100'
+            : index % 2 === 0 ? '-translate-x-12 opacity-0 scale-95' : 'translate-x-12 opacity-0 scale-95'
+        } ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
+          {/* Badge avec animation de bounce */}
+          <div 
+            className={`inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-50 to-brand-100 px-4 py-2 text-xs font-semibold text-brand-600 shadow-sm transition-all duration-500 hover:shadow-md hover:scale-105 ${
+              isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-6 opacity-0 scale-90'
+            }`}
+            style={{ transitionDelay: '100ms' }}
+          >
+            <div className="transition-transform duration-300 hover:rotate-12 hover:scale-110">
+              {service.icon}
+            </div>
+            <span>{language === 'fr' ? service.title : service.titleEn}</span>
+          </div>
+
+          {/* Titre avec animation de fade et scale */}
+          <h2 
+            className={`font-display text-3xl leading-tight text-ink transition-all duration-1000 ease-out md:text-4xl lg:text-5xl ${
+              isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-8 opacity-0 scale-95'
+            }`}
+            style={{ transitionDelay: '200ms' }}
+          >
+            {detail.title}
+          </h2>
+
+          {/* Description avec animation de slide */}
+          <p 
+            className={`text-lg leading-relaxed text-neutral-600 transition-all duration-1000 ease-out ${
+              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+            }`}
+            style={{ transitionDelay: '300ms' }}
+          >
+            {detail.description}
+          </p>
+
+          {/* Contenu spécifique selon le service */}
+          {service.slug === 'developpement-logiciel' && (
+            <div 
+              className={`space-y-6 transition-all duration-1000 ${
+                isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+              }`}
+              style={{ transitionDelay: '400ms' }}
+            >
+              {detail.sections?.map((section, idx) => (
+                <Card
+                  key={idx}
+                  elevation="md"
+                  className={`group transition-all duration-700 ${
+                    isVisible 
+                      ? 'translate-y-0 opacity-100 scale-100' 
+                      : 'translate-y-10 opacity-0 scale-95'
+                  }`}
+                  style={{ transitionDelay: `${500 + idx * 150}ms` }}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-50 transition-all duration-300 group-hover:scale-110 group-hover:bg-brand-100">
+                      {section.icon}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="mb-2 font-semibold text-ink transition-colors duration-300 group-hover:text-brand-600">
+                        {section.subtitle}
+                      </h3>
+                      <p className="text-sm leading-relaxed text-neutral-600">
+                        {section.content}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+              
+              {/* Garanties */}
+              <Card 
+                elevation="md" 
+                className={`transition-all duration-700 ${
+                  isVisible 
+                    ? 'translate-y-0 opacity-100 scale-100' 
+                    : 'translate-y-10 opacity-0 scale-95'
+                }`}
+                style={{ transitionDelay: `${800 + (detail.sections?.length || 0) * 150}ms` }}
+              >
+                <div className="mb-4 flex items-center gap-3">
+                  <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
+                  <h3 className="font-semibold text-ink">
+                    {language === 'fr' ? 'Nos Garanties' : 'Our Guarantees'}
+                  </h3>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {detail.guarantees?.map((guarantee, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`group flex items-start gap-2 transition-all duration-500 hover:translate-x-1 ${
+                        isVisible 
+                          ? 'translate-x-0 opacity-100' 
+                          : 'translate-x-6 opacity-0'
+                      }`}
+                      style={{ transitionDelay: `${900 + idx * 100}ms` }}
+                    >
+                      <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+                      <span className="text-sm text-neutral-600">{guarantee}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {service.slug === 'hebergement-infrastructure' && (
+            <div className="space-y-6 transition-all duration-1000 delay-300">
+              <Card elevation="md">
+                <div className="mb-4 flex items-center gap-3">
+                  <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
+                  <h3 className="font-semibold text-ink">
+                    {language === 'fr' ? 'Caractéristiques Premium' : 'Premium Features'}
+                  </h3>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {detail.features?.map((feature, idx) => (
+                    <div key={idx} className="flex items-start gap-2">
+                      <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
+                      <span className="text-sm text-neutral-600">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+              
+              <Card elevation="md">
+                <h3 className="mb-4 font-semibold text-ink">
+                  {language === 'fr' ? 'Plans d\'hébergement' : 'Hosting Plans'}
+                </h3>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {detail.plans?.map((plan, idx) => (
+                    <div
+                      key={idx}
+                      className="group relative overflow-hidden rounded-xl border-2 border-neutral-200 bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-lg"
+                    >
+                      {/* Gradient au hover */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-brand-50/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                      
+                      <div className="relative">
+                        <p className="mb-1 font-display text-xl font-semibold text-ink">
+                          {plan.name}
+                        </p>
+                        <p className="mb-3 text-xs text-neutral-500">
+                          {plan.desc}
+                        </p>
+                        {plan.features && (
+                          <ul className="space-y-1">
+                            {plan.features.map((feat, i) => (
+                              <li key={i} className="flex items-center gap-1.5 text-xs text-neutral-600">
+                                <div className="h-1 w-1 rounded-full bg-brand-500" />
+                                {feat}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+              
+              {/* Garanties */}
+              <Card elevation="md">
+                <div className="mb-4 flex items-center gap-3">
+                  <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
+                  <h3 className="font-semibold text-ink">
+                    {language === 'fr' ? 'Nos Engagements' : 'Our Commitments'}
+                  </h3>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {detail.guarantees?.map((guarantee, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`group flex items-start gap-2 transition-all duration-500 hover:translate-x-1 ${
+                        isVisible 
+                          ? 'translate-x-0 opacity-100' 
+                          : 'translate-x-6 opacity-0'
+                      }`}
+                      style={{ transitionDelay: `${900 + idx * 100}ms` }}
+                    >
+                      <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+                      <span className="text-sm text-neutral-600">{guarantee}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {service.slug === 'consultation-audit' && (
+            <div className="space-y-6 transition-all duration-1000 delay-300">
+              <Card elevation="md">
+                <div className="mb-4 flex items-center gap-3">
+                  <ChartBarIcon className="h-6 w-6 text-brand-500" />
+                  <h3 className="font-semibold text-ink">
+                    {language === 'fr' ? 'Services Inclus' : 'Services Included'}
+                  </h3>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {detail.services?.map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-2">
+                      <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
+                      <span className="text-sm text-neutral-600">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+              
+              <Card elevation="md">
+                <div className="mb-4 flex items-center gap-3">
+                  <RocketLaunchIcon className="h-6 w-6 text-brand-500" />
+                  <h3 className="font-semibold text-ink">
+                    {language === 'fr' ? 'Livrables' : 'Deliverables'}
+                  </h3>
+                </div>
+                <div className="space-y-3">
+                  {detail.deliverables?.map((deliverable, idx) => (
+                    <div key={idx} className="flex items-start gap-2">
+                      <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
+                      <span className="text-sm text-neutral-600">{deliverable}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+              
+              {/* Garanties */}
+              <Card elevation="md">
+                <div className="mb-4 flex items-center gap-3">
+                  <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
+                  <h3 className="font-semibold text-ink">
+                    {language === 'fr' ? 'Nos Garanties' : 'Our Guarantees'}
+                  </h3>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {detail.guarantees?.map((guarantee, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`group flex items-start gap-2 transition-all duration-500 hover:translate-x-1 ${
+                        isVisible 
+                          ? 'translate-x-0 opacity-100' 
+                          : 'translate-x-6 opacity-0'
+                      }`}
+                      style={{ transitionDelay: `${900 + idx * 100}ms` }}
+                    >
+                      <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+                      <span className="text-sm text-neutral-600">{guarantee}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {service.slug === 'formation-bootcamp' && (
+            <div className="space-y-6 transition-all duration-1000 delay-300">
+              <Card elevation="md">
+                <div className="mb-4 flex items-center gap-3">
+                  <AcademicCapIcon className="h-6 w-6 text-brand-500" />
+                  <h3 className="font-semibold text-ink">
+                    {language === 'fr' ? 'Programmes de Formation' : 'Training Programs'}
+                  </h3>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {detail.programs?.map((program, idx) => (
+                    <div key={idx} className="flex items-start gap-2">
+                      <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
+                      <span className="text-sm text-neutral-600">{program}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+              
+              <Card elevation="md">
+                <div className="mb-4 flex items-center gap-3">
+                  <ClockIcon className="h-6 w-6 text-brand-500" />
+                  <h3 className="font-semibold text-ink">
+                    {language === 'fr' ? 'Formats Disponibles' : 'Available Formats'}
+                  </h3>
+                </div>
+                <div className="space-y-3">
+                  {detail.formats?.map((format, idx) => (
+                    <div key={idx} className="flex items-start gap-2">
+                      <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
+                      <span className="text-sm text-neutral-600">{format}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+              
+              {/* Garanties */}
+              <Card elevation="md">
+                <div className="mb-4 flex items-center gap-3">
+                  <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
+                  <h3 className="font-semibold text-ink">
+                    {language === 'fr' ? 'Nos Garanties' : 'Our Guarantees'}
+                  </h3>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {detail.guarantees?.map((guarantee, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`group flex items-start gap-2 transition-all duration-500 hover:translate-x-1 ${
+                        isVisible 
+                          ? 'translate-x-0 opacity-100' 
+                          : 'translate-x-6 opacity-0'
+                      }`}
+                      style={{ transitionDelay: `${900 + idx * 100}ms` }}
+                    >
+                      <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+                      <span className="text-sm text-neutral-600">{guarantee}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {/* CTA pour ce service */}
+          <div className="pt-4 transition-all duration-1000 delay-500">
+            <Button
+              to="/contact"
+              variant="primary"
+              size="md"
+              icon={<ArrowRightIcon className="h-4 w-4" />}
+              iconPosition="right"
+            >
+              {language === 'fr' ? 'Discuter de ce service' : 'Discuss this service'}
+            </Button>
+          </div>
+        </div>
+
+        {/* Images avec animations variées */}
+        <div
+          className={`space-y-6 transition-all duration-1000 ${
+            isVisible
+              ? 'translate-x-0 opacity-100'
+              : index % 2 === 0 ? 'translate-x-12 opacity-0 scale-95' : '-translate-x-12 opacity-0 scale-95'
+          } ${index % 2 === 1 ? 'lg:order-1' : ''}`}
+          style={{ transitionDelay: '600ms' }}
+        >
+          {images.map((imageUrl, imgIndex) => (
+            <div
+              key={imgIndex}
+              className={`group relative overflow-hidden rounded-3xl transition-all duration-700 hover:shadow-2xl hover:-translate-y-2 ${
+                imgIndex === 0 ? 'lg:h-80' : 'lg:h-72'
+              } ${
+                isVisible 
+                  ? 'translate-y-0 opacity-100 scale-100 rotate-0' 
+                  : imgIndex % 2 === 0 
+                    ? 'translate-y-12 opacity-0 scale-90 rotate-2' 
+                    : 'translate-y-12 opacity-0 scale-90 -rotate-2'
+              }`}
+              style={{ transitionDelay: `${700 + imgIndex * 200}ms` }}
+            >
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-10" />
+              
+              {/* Image avec animation de zoom */}
+              <OptimizedImage
+                src={imageUrl}
+                alt={`${detail.title} - ${language === 'fr' ? 'Illustration' : 'Illustration'} ${imgIndex + 1}`}
+                width={800}
+                height={600}
+                priority={imgIndex === 0 ? "high" : "low"}
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-115 group-hover:rotate-1"
+              />
+              
+              {/* Badge sur l'image */}
+              <div className="absolute bottom-4 left-4 right-4 z-20 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0 translate-y-4">
+                <div className="rounded-xl bg-white/95 backdrop-blur-sm px-4 py-2 shadow-lg">
+                  <p className="text-xs font-semibold text-ink">
+                    {language === 'fr' ? 'Solution Professionnelle' : 'Professional Solution'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function Services() {
   const { language } = useLanguage()
   const { elementRef: introRef, isVisible: introVisible } = useScrollAnimation({ threshold: 0.2 })
@@ -381,409 +875,16 @@ function Services() {
 
       {/* Services Détaillés avec animations */}
       <div className="space-y-32">
-        {services.map((service, index) => {
-          const detail = serviceDetails[index]
-          const images = serviceImages[service.slug as keyof typeof serviceImages] || []
-          const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.2 })
-
-          // Mapper les slugs vers les IDs pour la navigation
-          const sectionIdMap: { [key: string]: string } = {
-            'developpement-logiciel': 'development',
-            'hebergement-infrastructure': 'hosting',
-            'consultation-audit': 'consultation',
-            'formation-bootcamp': 'training',
-          }
-          const sectionId = sectionIdMap[service.slug] || service.slug
-
-          return (
-            <section key={service.slug} id={sectionId} ref={elementRef} className="scroll-mt-20">
-              <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
-                {/* Contenu avec animations variées */}
-                <div className={`space-y-8 transition-all duration-1000 ${
-                  isVisible
-                    ? 'translate-x-0 opacity-100'
-                    : index % 2 === 0 ? '-translate-x-12 opacity-0 scale-95' : 'translate-x-12 opacity-0 scale-95'
-                } ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
-                  {/* Badge avec animation de bounce */}
-                  <div 
-                    className={`inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-50 to-brand-100 px-4 py-2 text-xs font-semibold text-brand-600 shadow-sm transition-all duration-500 hover:shadow-md hover:scale-105 ${
-                      isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-6 opacity-0 scale-90'
-                    }`}
-                    style={{ transitionDelay: '100ms' }}
-                  >
-                    <div className="transition-transform duration-300 hover:rotate-12 hover:scale-110">
-                      {service.icon}
-                    </div>
-                    <span>{language === 'fr' ? service.title : service.titleEn}</span>
-                  </div>
-
-                  {/* Titre avec animation de fade et scale */}
-                  <h2 
-                    className={`font-display text-3xl leading-tight text-ink transition-all duration-1000 ease-out md:text-4xl lg:text-5xl ${
-                      isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-8 opacity-0 scale-95'
-                    }`}
-                    style={{ transitionDelay: '200ms' }}
-                  >
-                    {detail.title}
-                  </h2>
-
-                  {/* Description avec animation de slide */}
-                  <p 
-                    className={`text-lg leading-relaxed text-neutral-600 transition-all duration-1000 ease-out ${
-                      isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
-                    }`}
-                    style={{ transitionDelay: '300ms' }}
-                  >
-                    {detail.description}
-                  </p>
-
-                  {/* Contenu spécifique selon le service */}
-                  {service.slug === 'developpement-logiciel' && (
-                    <div 
-                      className={`space-y-6 transition-all duration-1000 ${
-                        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                      }`}
-                      style={{ transitionDelay: '400ms' }}
-                    >
-                      {detail.sections?.map((section, idx) => (
-                        <Card
-                          key={idx}
-                          elevation="md"
-                          className={`group transition-all duration-700 ${
-                            isVisible 
-                              ? 'translate-y-0 opacity-100 scale-100' 
-                              : 'translate-y-10 opacity-0 scale-95'
-                          }`}
-                          style={{ transitionDelay: `${500 + idx * 150}ms` }}
-                        >
-                          <div className="flex items-start gap-4">
-                            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-50 transition-all duration-300 group-hover:scale-110 group-hover:bg-brand-100">
-                              {section.icon}
-                            </div>
-                            <div className="flex-1">
-                              <h3 className="mb-2 font-semibold text-ink transition-colors duration-300 group-hover:text-brand-600">
-                                {section.subtitle}
-                              </h3>
-                              <p className="text-sm leading-relaxed text-neutral-600">
-                                {section.content}
-                              </p>
-                            </div>
-                          </div>
-                        </Card>
-                      ))}
-                      
-                      {/* Garanties */}
-                      <Card 
-                        elevation="md" 
-                        className={`transition-all duration-700 ${
-                          isVisible 
-                            ? 'translate-y-0 opacity-100 scale-100' 
-                            : 'translate-y-10 opacity-0 scale-95'
-                        }`}
-                        style={{ transitionDelay: `${800 + (detail.sections?.length || 0) * 150}ms` }}
-                      >
-                        <div className="mb-4 flex items-center gap-3">
-                          <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
-                          <h3 className="font-semibold text-ink">
-                            {language === 'fr' ? 'Nos Garanties' : 'Our Guarantees'}
-                          </h3>
-                        </div>
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          {detail.guarantees?.map((guarantee, idx) => (
-                            <div 
-                              key={idx} 
-                              className={`group flex items-start gap-2 transition-all duration-500 hover:translate-x-1 ${
-                                isVisible 
-                                  ? 'translate-x-0 opacity-100' 
-                                  : 'translate-x-6 opacity-0'
-                              }`}
-                              style={{ transitionDelay: `${900 + idx * 100}ms` }}
-                            >
-                              <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
-                              <span className="text-sm text-neutral-600">{guarantee}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                    </div>
-                  )}
-
-                  {service.slug === 'hebergement-infrastructure' && (
-                    <div className="space-y-6 transition-all duration-1000 delay-300">
-                      <Card elevation="md">
-                        <div className="mb-4 flex items-center gap-3">
-                          <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
-                          <h3 className="font-semibold text-ink">
-                            {language === 'fr' ? 'Caractéristiques Premium' : 'Premium Features'}
-                          </h3>
-                        </div>
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          {detail.features?.map((feature, idx) => (
-                            <div key={idx} className="flex items-start gap-2">
-                              <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
-                              <span className="text-sm text-neutral-600">{feature}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                      
-                      <Card elevation="md">
-                        <h3 className="mb-4 font-semibold text-ink">
-                          {language === 'fr' ? 'Plans d\'hébergement' : 'Hosting Plans'}
-                        </h3>
-                        <div className="grid gap-4 sm:grid-cols-2">
-                          {detail.plans?.map((plan, idx) => (
-                            <div
-                              key={idx}
-                              className="group relative overflow-hidden rounded-xl border-2 border-neutral-200 bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-lg"
-                            >
-                              {/* Gradient au hover */}
-                              <div className="absolute inset-0 bg-gradient-to-br from-brand-50/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                              
-                              <div className="relative">
-                                <p className="mb-1 font-display text-xl font-semibold text-ink">
-                                  {plan.name}
-                                </p>
-                                <p className="mb-3 text-xs text-neutral-500">
-                                  {plan.desc}
-                                </p>
-                                {plan.features && (
-                                  <ul className="space-y-1">
-                                    {plan.features.map((feat, i) => (
-                                      <li key={i} className="flex items-center gap-1.5 text-xs text-neutral-600">
-                                        <div className="h-1 w-1 rounded-full bg-brand-500" />
-                                        {feat}
-                                      </li>
-                                    ))}
-                                  </ul>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                      
-                      {/* Garanties */}
-                      <Card elevation="md">
-                        <div className="mb-4 flex items-center gap-3">
-                          <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
-                          <h3 className="font-semibold text-ink">
-                            {language === 'fr' ? 'Nos Engagements' : 'Our Commitments'}
-                          </h3>
-                        </div>
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          {detail.guarantees?.map((guarantee, idx) => (
-                            <div 
-                              key={idx} 
-                              className={`group flex items-start gap-2 transition-all duration-500 hover:translate-x-1 ${
-                                isVisible 
-                                  ? 'translate-x-0 opacity-100' 
-                                  : 'translate-x-6 opacity-0'
-                              }`}
-                              style={{ transitionDelay: `${900 + idx * 100}ms` }}
-                            >
-                              <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
-                              <span className="text-sm text-neutral-600">{guarantee}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                    </div>
-                  )}
-
-                  {service.slug === 'consultation-audit' && (
-                    <div className="space-y-6 transition-all duration-1000 delay-300">
-                      <Card elevation="md">
-                        <div className="mb-4 flex items-center gap-3">
-                          <ChartBarIcon className="h-6 w-6 text-brand-500" />
-                          <h3 className="font-semibold text-ink">
-                            {language === 'fr' ? 'Services Inclus' : 'Services Included'}
-                          </h3>
-                        </div>
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          {detail.services?.map((item, idx) => (
-                            <div key={idx} className="flex items-start gap-2">
-                              <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
-                              <span className="text-sm text-neutral-600">{item}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                      
-                      <Card elevation="md">
-                        <div className="mb-4 flex items-center gap-3">
-                          <RocketLaunchIcon className="h-6 w-6 text-brand-500" />
-                          <h3 className="font-semibold text-ink">
-                            {language === 'fr' ? 'Livrables' : 'Deliverables'}
-                          </h3>
-                        </div>
-                        <div className="space-y-3">
-                          {detail.deliverables?.map((deliverable, idx) => (
-                            <div key={idx} className="flex items-start gap-2">
-                              <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
-                              <span className="text-sm text-neutral-600">{deliverable}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                      
-                      {/* Garanties */}
-                      <Card elevation="md">
-                        <div className="mb-4 flex items-center gap-3">
-                          <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
-                          <h3 className="font-semibold text-ink">
-                            {language === 'fr' ? 'Nos Garanties' : 'Our Guarantees'}
-                          </h3>
-                        </div>
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          {detail.guarantees?.map((guarantee, idx) => (
-                            <div 
-                              key={idx} 
-                              className={`group flex items-start gap-2 transition-all duration-500 hover:translate-x-1 ${
-                                isVisible 
-                                  ? 'translate-x-0 opacity-100' 
-                                  : 'translate-x-6 opacity-0'
-                              }`}
-                              style={{ transitionDelay: `${900 + idx * 100}ms` }}
-                            >
-                              <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
-                              <span className="text-sm text-neutral-600">{guarantee}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                    </div>
-                  )}
-
-                  {service.slug === 'formation-bootcamp' && (
-                    <div className="space-y-6 transition-all duration-1000 delay-300">
-                      <Card elevation="md">
-                        <div className="mb-4 flex items-center gap-3">
-                          <AcademicCapIcon className="h-6 w-6 text-brand-500" />
-                          <h3 className="font-semibold text-ink">
-                            {language === 'fr' ? 'Programmes de Formation' : 'Training Programs'}
-                          </h3>
-                        </div>
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          {detail.programs?.map((program, idx) => (
-                            <div key={idx} className="flex items-start gap-2">
-                              <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
-                              <span className="text-sm text-neutral-600">{program}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                      
-                      <Card elevation="md">
-                        <div className="mb-4 flex items-center gap-3">
-                          <ClockIcon className="h-6 w-6 text-brand-500" />
-                          <h3 className="font-semibold text-ink">
-                            {language === 'fr' ? 'Formats Disponibles' : 'Available Formats'}
-                          </h3>
-                        </div>
-                        <div className="space-y-3">
-                          {detail.formats?.map((format, idx) => (
-                            <div key={idx} className="flex items-start gap-2">
-                              <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
-                              <span className="text-sm text-neutral-600">{format}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                      
-                      {/* Garanties */}
-                      <Card elevation="md">
-                        <div className="mb-4 flex items-center gap-3">
-                          <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
-                          <h3 className="font-semibold text-ink">
-                            {language === 'fr' ? 'Nos Garanties' : 'Our Guarantees'}
-                          </h3>
-                        </div>
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          {detail.guarantees?.map((guarantee, idx) => (
-                            <div 
-                              key={idx} 
-                              className={`group flex items-start gap-2 transition-all duration-500 hover:translate-x-1 ${
-                                isVisible 
-                                  ? 'translate-x-0 opacity-100' 
-                                  : 'translate-x-6 opacity-0'
-                              }`}
-                              style={{ transitionDelay: `${900 + idx * 100}ms` }}
-                            >
-                              <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
-                              <span className="text-sm text-neutral-600">{guarantee}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                    </div>
-                  )}
-
-                  {/* CTA pour ce service */}
-                  <div className="pt-4 transition-all duration-1000 delay-500">
-                    <Button
-                      to="/contact"
-                      variant="primary"
-                      size="md"
-                      icon={<ArrowRightIcon className="h-4 w-4" />}
-                      iconPosition="right"
-                    >
-                      {language === 'fr' ? 'Discuter de ce service' : 'Discuss this service'}
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Images avec animations variées */}
-                <div
-                  className={`space-y-6 transition-all duration-1000 ${
-                    isVisible
-                      ? 'translate-x-0 opacity-100'
-                      : index % 2 === 0 ? 'translate-x-12 opacity-0 scale-95' : '-translate-x-12 opacity-0 scale-95'
-                  } ${index % 2 === 1 ? 'lg:order-1' : ''}`}
-                  style={{ transitionDelay: '600ms' }}
-                >
-                  {images.map((imageUrl, imgIndex) => (
-                    <div
-                      key={imgIndex}
-                      className={`group relative overflow-hidden rounded-3xl transition-all duration-700 hover:shadow-2xl hover:-translate-y-2 ${
-                        imgIndex === 0 ? 'lg:h-80' : 'lg:h-72'
-                      } ${
-                        isVisible 
-                          ? 'translate-y-0 opacity-100 scale-100 rotate-0' 
-                          : imgIndex % 2 === 0 
-                            ? 'translate-y-12 opacity-0 scale-90 rotate-2' 
-                            : 'translate-y-12 opacity-0 scale-90 -rotate-2'
-                      }`}
-                      style={{ transitionDelay: `${700 + imgIndex * 200}ms` }}
-                    >
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-10" />
-                      
-                      {/* Image avec animation de zoom */}
-                      <OptimizedImage
-                        src={imageUrl}
-                        alt={`${detail.title} - ${language === 'fr' ? 'Illustration' : 'Illustration'} ${imgIndex + 1}`}
-                        width={800}
-                        height={600}
-                        priority={imgIndex === 0 ? "high" : "low"}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-115 group-hover:rotate-1"
-                      />
-                      
-                      {/* Badge sur l'image */}
-                      <div className="absolute bottom-4 left-4 right-4 z-20 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0 translate-y-4">
-                        <div className="rounded-xl bg-white/95 backdrop-blur-sm px-4 py-2 shadow-lg">
-                          <p className="text-xs font-semibold text-ink">
-                            {language === 'fr' ? 'Solution Professionnelle' : 'Professional Solution'}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-          )
-        })}
+        {services.map((service, index) => (
+          <ServiceDetailSection
+            key={service.slug}
+            service={service}
+            detail={serviceDetails[index]}
+            images={serviceImages[service.slug as keyof typeof serviceImages] || []}
+            index={index}
+            language={language}
+          />
+        ))}
       </div>
 
       {/* Timeline Méthodologie */}
@@ -836,68 +937,14 @@ function Services() {
 
           {/* Étapes de la timeline */}
           <div className="space-y-8 lg:space-y-16">
-            {process.map((step, index) => {
-              const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.2 })
-              const isEven = index % 2 === 0
-
-              return (
-                <div
-                  key={step.step}
-                  ref={elementRef}
-                  className={`relative flex items-center ${
-                    // Sur mobile, toutes les cartes sont centrées et pleine largeur
-                    // Sur lg et plus, alternance gauche/droite
-                    'justify-center lg:justify-start'
-                  } ${!isEven ? 'lg:justify-end' : ''}`}
-                >
-                  {/* Point de connexion - masqué sur mobile */}
-                  <div
-                    className={`absolute left-1/2 top-1/2 z-10 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white bg-brand-500 text-white shadow-lg transition-all duration-500 group-hover/step:scale-125 group-hover/step:rotate-180 lg:flex ${
-                      isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-                    }`}
-                    style={{ transitionDelay: `${index * 100 + 500}ms` }}
-                  >
-                    <span className="font-display text-lg font-bold">{step.step}</span>
-                  </div>
-
-                  {/* Contenu */}
-                  <Card
-                    elevation="md"
-                    className={`group relative w-full lg:w-[calc(50%-40px)] ${
-                      isVisible
-                        ? 'translate-y-0 opacity-100'
-                        : 'translate-y-8 opacity-0'
-                    }`}
-                    style={{ transitionDelay: `${index * 150}ms` }}
-                  >
-                    <div className="relative">
-                      <div className="mb-4 flex items-center gap-4">
-                        {/* Badge numéro d'étape */}
-                        <div className="relative">
-                          <div className="absolute inset-0 rounded-2xl bg-brand-400/30 blur-xl opacity-0 transition-opacity duration-500 group-hover:opacity-50" />
-                          <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-500 text-white shadow-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-brand-600">
-                            <span className="font-display text-2xl font-bold">{step.step}</span>
-                          </div>
-                        </div>
-                        
-                        <div className="flex-1">
-                          <div className="mb-1 text-xs font-semibold uppercase tracking-wider text-brand-600">
-                            {language === 'fr' ? 'Étape' : 'Step'} {step.step}
-                          </div>
-                          <h3 className="text-xl font-semibold text-ink transition-colors duration-300 group-hover:text-brand-600 md:text-2xl">
-                            {language === 'fr' ? step.title : step.titleEn}
-                          </h3>
-                        </div>
-                      </div>
-                      
-                      <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
-                        {language === 'fr' ? step.description : step.descriptionEn}
-                      </p>
-                    </div>
-                  </Card>
-                </div>
-              )
-            })}
+            {process.map((step, index) => (
+              <MethodologyStep
+                key={step.step}
+                step={step}
+                index={index}
+                language={language}
+              />
+            ))}
           </div>
         </div>
       </section>

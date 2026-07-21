@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import type { NavItem } from '../../data/navigation'
+import { HEADER_SCROLL_OFFSET } from '../../constants/layout'
 
 interface MobileNavigationMenuProps {
   items: NavItem[]
@@ -31,7 +32,7 @@ export function MobileNavigationMenu({ items, onClose }: MobileNavigationMenuPro
           requestAnimationFrame(() => {
             const element = document.getElementById(anchor)
             if (element) {
-              const headerOffset = 120
+              const headerOffset = HEADER_SCROLL_OFFSET
               const elementPosition = element.getBoundingClientRect().top
               const offsetPosition = elementPosition + window.pageYOffset - headerOffset
 
@@ -66,27 +67,38 @@ export function MobileNavigationMenu({ items, onClose }: MobileNavigationMenuPro
           <div key={item.path}>
             {hasSections ? (
               <>
-                <button
-                  onClick={() => toggleItem(item.path)}
-                  className={`relative flex w-full items-center justify-between rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-0 focus:border-0 ${
-                    isActive
-                      ? 'text-brand-500 font-semibold'
-                      : 'bg-transparent text-neutral-700 hover:bg-neutral-50 hover:text-brand-500'
-                  }`}
-                  aria-label={`${item.label} - ${isOpen ? 'Close' : 'Open'} sections`}
-                  aria-expanded={isOpen}
-                  aria-haspopup="true"
-                >
-                  {isActive && (
-                    <span className="absolute bottom-0 left-4 h-0.5 w-8 rounded-full bg-brand-500" />
-                  )}
-                  <span>{item.label}</span>
-                  <ChevronDownIcon
-                    className={`h-4 w-4 transition-transform duration-200 ${
-                      isOpen ? 'rotate-180' : ''
+                <div className="flex w-full items-center gap-1">
+                  <button
+                    onClick={() => {
+                      navigate(item.path)
+                      onClose()
+                    }}
+                    className={`relative flex flex-1 items-center rounded-lg px-4 py-2.5 text-left text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 ${
+                      isActive
+                        ? 'text-brand-500 font-semibold'
+                        : 'bg-transparent text-neutral-700 hover:bg-neutral-50 hover:text-brand-500'
                     }`}
-                  />
-                </button>
+                    aria-label={item.label}
+                  >
+                    {isActive && (
+                      <span className="absolute bottom-0 left-4 h-0.5 w-8 rounded-full bg-brand-500" />
+                    )}
+                    <span>{item.label}</span>
+                  </button>
+                  <button
+                    onClick={() => toggleItem(item.path)}
+                    className="rounded-lg p-2.5 text-neutral-500 transition-colors hover:bg-neutral-50 hover:text-brand-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+                    aria-label={`${item.label} - ${isOpen ? 'Close' : 'Open'} sections`}
+                    aria-expanded={isOpen}
+                    aria-haspopup="true"
+                  >
+                    <ChevronDownIcon
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        isOpen ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                </div>
                 <div
                   ref={(el) => {
                     sectionRefs.current[item.path] = el

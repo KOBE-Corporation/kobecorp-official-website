@@ -13,6 +13,7 @@ import { useNavigationItems } from '../../data/navigation'
 import { OptimizedImage } from '../OptimizedImage'
 import { useLocalizedPath } from '../../hooks/useLocalizedPath'
 import { LanguageFlag } from '../icons/LanguageFlag'
+import { BRAND_IMAGE_PATH } from '../../constants/brand'
 
 const Header = memo(function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -35,7 +36,7 @@ const Header = memo(function Header() {
         >
           <div className="flex h-11 w-11 shrink-0 items-center justify-center bg-transparent transition-all duration-200 hover:scale-105 p-1 sm:h-12 sm:w-12">
             <OptimizedImage
-              src="/logo-nom.jpeg"
+              src={BRAND_IMAGE_PATH}
               alt={`${companyInfo.name} - ${companyInfo.slogan}`}
               width={48}
               height={48}

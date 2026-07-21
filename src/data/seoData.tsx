@@ -109,7 +109,7 @@ export const seoData = {
   },
 }
 
-export const getSEOData = (path: string, language: 'fr' | 'en' = 'fr') => {
+export const getSEOData = (path: string, language: 'fr' | 'en' = 'en') => {
   const pathKey = path.replace('/', '') || 'home'
   const data = seoData[pathKey as keyof typeof seoData]
   return data ? data[language] : seoData.home[language]

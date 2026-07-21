@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { useLanguage } from '../../contexts/LanguageContext'
 import type { NavItem } from '../../data/navigation'
+import { HEADER_SCROLL_OFFSET } from '../../constants/layout'
 
 interface NavigationMenuProps {
   items: NavItem[]
@@ -58,9 +59,9 @@ export function NavigationMenu({ items, className = '' }: NavigationMenuProps) {
         setTimeout(() => {
           const element = document.getElementById(anchor)
           if (element) {
-            const headerOffset = 120
-            const elementPosition = element.getBoundingClientRect().top
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+            const headerOffset = HEADER_SCROLL_OFFSET
+              const elementPosition = element.getBoundingClientRect().top
+              const offsetPosition = elementPosition + window.pageYOffset - headerOffset
 
             window.scrollTo({
               top: offsetPosition,
@@ -83,14 +84,14 @@ export function NavigationMenu({ items, className = '' }: NavigationMenuProps) {
   const handleMainNavClick = (e: React.MouseEvent, item: NavItem) => {
     e.preventDefault()
     e.stopPropagation()
+    setOpenDropdown(null)
+    navigate(item.path)
+  }
 
-    // Si l'item a des sections, toggle le dropdown
-    if (item.sections && item.sections.length > 0) {
-      setOpenDropdown(openDropdown === item.path ? null : item.path)
-    } else {
-      // Sinon, naviguer normalement
-      navigate(item.path)
-    }
+  const handleToggleSections = (e: React.MouseEvent, item: NavItem) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setOpenDropdown(openDropdown === item.path ? null : item.path)
   }
 
   // Détecter si c'est un layout vertical (footer)
@@ -115,14 +116,12 @@ export function NavigationMenu({ items, className = '' }: NavigationMenuProps) {
               <div className={`relative ${isVertical ? 'w-full' : 'inline-flex'} items-center`}>
                 <button
                   onClick={(e) => handleMainNavClick(e, item)}
-                  className={`relative ${isVertical ? 'w-full justify-between' : 'inline-flex'} flex items-center gap-1.5 ${isVertical ? 'rounded-lg px-3 py-2' : 'rounded-full px-4 py-2'} text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-0 focus:border-0 ${
+                  className={`relative ${isVertical ? 'flex-1 justify-start' : 'inline-flex'} flex items-center gap-1.5 ${isVertical ? 'rounded-lg px-3 py-2' : 'rounded-full px-4 py-2'} text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 ${
                     isActive
                       ? 'text-brand-500 font-semibold'
                       : 'text-neutral-700 hover:bg-neutral-50 hover:text-brand-500'
                   }`}
-                  aria-label={item.sections ? `${item.label} - ${t('nav.showSections') || 'Show sections'}` : item.label}
-                  aria-expanded={item.sections ? openDropdown === item.path : undefined}
-                  aria-haspopup={item.sections ? 'true' : undefined}
+                  aria-label={item.label}
                 >
                   {isActive && !isVertical && (
                     <span className="absolute bottom-0 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-full bg-brand-500" />
@@ -131,6 +130,14 @@ export function NavigationMenu({ items, className = '' }: NavigationMenuProps) {
                     <span className="absolute bottom-0 left-3 h-0.5 w-8 rounded-full bg-brand-500" />
                   )}
                   {item.label}
+                </button>
+                <button
+                  onClick={(e) => handleToggleSections(e, item)}
+                  className="rounded-full p-1.5 text-neutral-500 transition-colors hover:bg-neutral-50 hover:text-brand-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+                  aria-label={`${item.label} - ${t('nav.showSections') || 'Show sections'}`}
+                  aria-expanded={isOpen}
+                  aria-haspopup="true"
+                >
                   <ChevronDownIcon
                     className={`h-4 w-4 transition-transform duration-200 ${
                       isOpen ? 'rotate-180' : ''

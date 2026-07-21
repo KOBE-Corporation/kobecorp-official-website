@@ -5,10 +5,10 @@ import { useCookies } from '../../contexts/CookieContext'
 import { companyInfo, contactInfo, programmes } from '../../data/siteContent'
 import { WhatsAppIcon, FacebookIcon, LinkedInIcon, InstagramIcon } from '../icons/SocialIcons'
 import { LanguageFlag } from '../icons/LanguageFlag'
-import { NavigationMenu } from '../navigation/NavigationMenu'
 import { useNavigationItems } from '../../data/navigation'
 import { OptimizedImage } from '../OptimizedImage'
 import { useLocalizedPath } from '../../hooks/useLocalizedPath'
+import { BRAND_IMAGE_PATH } from '../../constants/brand'
 
 const Footer = memo(function Footer() {
   const { language, setLanguage, t } = useLanguage()
@@ -25,7 +25,7 @@ const Footer = memo(function Footer() {
             <NavLink to={lp('/')} className="mb-4 inline-flex items-center gap-2 transition-transform duration-200 hover:scale-105 focus:outline-none rounded-lg">
               <div className="flex h-12 w-12 items-center justify-center bg-transparent transition-all duration-200 hover:scale-105 p-1.5">
                 <OptimizedImage
-                  src="/logo-nom.jpeg"
+                  src={BRAND_IMAGE_PATH}
                   alt={`${companyInfo.name} - ${companyInfo.slogan}`}
                   width={48}
                   height={48}
@@ -64,7 +64,21 @@ const Footer = memo(function Footer() {
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-ink">
               {t('footer.quickLinks')}
             </h3>
-            <NavigationMenu items={navItems} className="flex-col items-start gap-2" />
+            <nav className="flex flex-col items-start gap-2">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `text-sm transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 rounded ${
+                      isActive ? 'font-semibold text-brand-500' : 'text-neutral-600 hover:text-brand-500'
+                    }`
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </nav>
           </div>
 
           {/* Colonne 3: Programmes */}

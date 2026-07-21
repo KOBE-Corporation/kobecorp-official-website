@@ -73,21 +73,82 @@ const processSteps: ProcessStep[] = [
   },
 ]
 
+function ProcessStepCard({
+  step,
+  index,
+  language,
+}: {
+  step: ProcessStep
+  index: number
+  language: 'fr' | 'en'
+}) {
+  const Icon = step.icon
+  const isEven = index % 2 === 0
+  const { elementRef: stepRef, isVisible: stepVisible } = useScrollAnimation({ threshold: 0.2 })
+
+  return (
+    <div
+      ref={stepRef}
+      className={`relative flex items-center justify-center lg:justify-start ${
+        !isEven ? 'lg:justify-end' : ''
+      }`}
+    >
+      <div
+        className={`absolute left-1/2 top-1/2 z-10 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white bg-brand-500 text-white shadow-lg transition-all duration-500 lg:flex ${
+          stepVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+        }`}
+        style={{ transitionDelay: `${index * 100 + 500}ms` }}
+      >
+        <span className="font-display text-lg font-bold">{index + 1}</span>
+      </div>
+
+      <Card
+        elevation="md"
+        hover={false}
+        className={`group relative w-full lg:w-[calc(50%-40px)] ${
+          stepVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+        }`}
+        style={{ transitionDelay: `${index * 150}ms` }}
+      >
+        <div className="relative">
+          <div className="mb-5 flex items-start gap-4">
+            <div className="relative">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-brand-100 to-brand-200 opacity-0 blur-xl transition-all duration-500 group-hover:opacity-50 group-hover:scale-150" />
+              <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-50 to-brand-100 shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-xl">
+                <Icon className="h-7 w-7 text-brand-600 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-[-6deg]" />
+              </div>
+              <div className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-xs font-bold text-white shadow-md transition-all duration-300 group-hover:scale-125 group-hover:rotate-12">
+                {index + 1}
+              </div>
+            </div>
+
+            <div className="flex-1 pt-1">
+              <div className="mb-1 text-xs font-semibold uppercase tracking-wider text-brand-600 transition-colors duration-300 group-hover:text-brand-700">
+                {language === 'fr' ? 'Étape' : 'Step'} {index + 1}
+              </div>
+              <h3 className="text-xl font-semibold text-ink transition-colors duration-300 group-hover:text-brand-600">
+                {language === 'fr' ? step.title : step.titleEn}
+              </h3>
+            </div>
+          </div>
+          <p className="leading-relaxed text-neutral-600 transition-colors duration-300 group-hover:text-neutral-700">
+            {language === 'fr' ? step.description : step.descriptionEn}
+          </p>
+        </div>
+      </Card>
+    </div>
+  )
+}
+
 function ProcessSection() {
   const { language } = useLanguage()
   const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.1 })
 
   return (
-    <section
-      ref={elementRef}
-      id="process"
-      className="space-y-10 md:space-y-12"
-    >
+    <section ref={elementRef} id="process" className="space-y-10 md:space-y-12">
       <div
         className={`text-center transition-all duration-1000 ${
-          isVisible
-            ? 'translate-y-0 opacity-100'
-            : 'translate-y-8 opacity-0'
+          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
         }`}
       >
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600">
@@ -105,23 +166,16 @@ function ProcessSection() {
         </p>
       </div>
 
-      {/* Process Steps */}
       <div className="relative">
-        {/* Ligne de connexion animée (lg et plus seulement) */}
         <div className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 lg:block">
-          {/* Ligne de base */}
           <div className="absolute inset-0 bg-neutral-200 opacity-30" />
-          
-          {/* Ligne animée qui se remplit */}
-          <div 
+          <div
             className="absolute top-0 left-0 w-full bg-brand-500 transition-all duration-1000"
             style={{
               height: isVisible ? '100%' : '0%',
               transitionDelay: '500ms',
             }}
           />
-          
-          {/* Particules animées le long de la ligne */}
           {isVisible && (
             <div className="absolute inset-0">
               {[...Array(3)].map((_, i) => (
@@ -140,93 +194,19 @@ function ProcessSection() {
         </div>
 
         <div className="space-y-8 lg:space-y-12">
-          {processSteps.map((step, index) => {
-            const Icon = step.icon
-            const isEven = index % 2 === 0
-            const { elementRef: stepRef, isVisible: stepVisible } = useScrollAnimation({ threshold: 0.2 })
-
-            return (
-              <div
-                key={index}
-                ref={stepRef}
-                className={`relative flex items-center ${
-                  // Sur mobile, toutes les cartes sont centrées et pleine largeur
-                  // Sur lg et plus, alternance gauche/droite
-                  'justify-center lg:justify-start'
-                } ${!isEven ? 'lg:justify-end' : ''}`}
-              >
-                {/* Point de connexion - masqué sur mobile */}
-                <div
-                  className={`absolute left-1/2 top-1/2 z-10 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white bg-brand-500 text-white shadow-lg transition-all duration-500 group-hover/step:scale-125 group-hover/step:rotate-180 lg:flex ${
-                    stepVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-                  }`}
-                  style={{ transitionDelay: `${index * 100 + 500}ms` }}
-                >
-                  <span className="font-display text-lg font-bold">{index + 1}</span>
-                </div>
-
-                {/* Contenu */}
-                <Card
-                  elevation="md"
-                  className={`group relative w-full lg:w-[calc(50%-40px)] ${
-                    stepVisible
-                      ? 'translate-y-0 opacity-100'
-                      : 'translate-y-8 opacity-0'
-                  }`}
-                  style={{
-                    transitionDelay: `${index * 150}ms`,
-                  }}
-                >
-                  <div className="relative">
-                    <div className="mb-5 flex items-start gap-4">
-                      <div className="relative">
-                        {/* Cercle de fond animé */}
-                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-brand-100 to-brand-200 opacity-0 blur-xl transition-all duration-500 group-hover:opacity-50 group-hover:scale-150" />
-                        
-                        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-50 to-brand-100 shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-xl">
-                          <Icon className="h-7 w-7 text-brand-600 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-[-6deg]" />
-                        </div>
-                        
-                        {/* Badge numéro d'étape */}
-                        <div className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-xs font-bold text-white shadow-md transition-all duration-300 group-hover:scale-125 group-hover:rotate-12">
-                          {index + 1}
-                        </div>
-                      </div>
-                      
-                      <div className="flex-1 pt-1">
-                        <div className="mb-1 text-xs font-semibold uppercase tracking-wider text-brand-600 transition-colors duration-300 group-hover:text-brand-700">
-                          {language === 'fr' ? 'Étape' : 'Step'} {index + 1}
-                        </div>
-                        <h3 className="text-xl font-semibold text-ink transition-colors duration-300 group-hover:text-brand-600">
-                          {language === 'fr' ? step.title : step.titleEn}
-                        </h3>
-                      </div>
-                    </div>
-                    <p className="leading-relaxed text-neutral-600 transition-colors duration-300 group-hover:text-neutral-700">
-                      {language === 'fr'
-                        ? step.description
-                        : step.descriptionEn}
-                    </p>
-                  </div>
-                </Card>
-              </div>
-            )
-          })}
+          {processSteps.map((step, index) => (
+            <ProcessStepCard key={index} step={step} index={index} language={language} />
+          ))}
         </div>
       </div>
 
-      {/* CTA */}
       <div
         className={`text-center transition-all duration-1000 delay-700 ${
-          isVisible
-            ? 'translate-y-0 opacity-100'
-            : 'translate-y-8 opacity-0'
+          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
         }`}
       >
         <p className="mb-6 text-lg text-neutral-600 transition-colors duration-300">
-          {language === 'fr'
-            ? 'Prêt à démarrer votre projet ?'
-            : 'Ready to start your project?'}
+          {language === 'fr' ? 'Prêt à démarrer votre projet ?' : 'Ready to start your project?'}
         </p>
         <Button
           to="/contact"
@@ -235,7 +215,7 @@ function ProcessSection() {
           icon={<ArrowRightIcon className="h-5 w-5" />}
           iconPosition="right"
         >
-          {language === 'fr' ? 'Discutons de votre projet' : 'Let\'s discuss your project'}
+          {language === 'fr' ? 'Discutons de votre projet' : "Let's discuss your project"}
         </Button>
       </div>
     </section>

@@ -180,6 +180,269 @@ const programmeDetails = {
   },
 }
 
+type ProgrammeDetail = (typeof programmeDetails)[keyof typeof programmeDetails]
+
+function ProgrammeDetailSection({
+  programme,
+  details,
+  images,
+  index,
+  language,
+}: {
+  programme: (typeof programmes)[number]
+  details: ProgrammeDetail | undefined
+  images: string[]
+  index: number
+  language: 'fr' | 'en'
+}) {
+  const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.2 })
+
+  return (
+    <section
+      id={programme.id}
+      ref={elementRef}
+      className="scroll-mt-20"
+    >
+      <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
+        {/* Contenu avec animations variées */}
+        <div
+          className={`space-y-8 transition-all duration-1000 ${
+            isVisible
+              ? 'translate-x-0 opacity-100'
+              : index % 2 === 0
+              ? '-translate-x-12 opacity-0 scale-95'
+              : 'translate-x-12 opacity-0 scale-95'
+          } ${index % 2 === 1 ? 'lg:order-2' : ''}`}
+        >
+          {/* Badge avec animation de bounce */}
+          <div 
+            className={`inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-50 to-brand-100 px-4 py-2 text-xs font-semibold text-brand-600 shadow-sm transition-all duration-500 hover:shadow-md hover:scale-105 ${
+              isVisible ? 'translate-y-0 opacity-100 scale-100 rotate-0' : 'translate-y-6 opacity-0 scale-90 rotate-3'
+            }`}
+            style={{ transitionDelay: '100ms' }}
+          >
+            <div className="transition-transform duration-300 hover:rotate-12 hover:scale-110">
+              {programme.icon}
+            </div>
+            <span>
+              {language === 'fr' ? programme.title : programme.titleEn}
+            </span>
+          </div>
+
+          {/* Titre avec animation de fade et scale */}
+          <h2 
+            className={`font-display text-3xl leading-tight text-ink transition-all duration-1000 ease-out md:text-4xl lg:text-5xl ${
+              isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-8 opacity-0 scale-95'
+            }`}
+            style={{ transitionDelay: '200ms' }}
+          >
+            {language === 'fr' ? programme.title : programme.titleEn}
+          </h2>
+
+          {/* Slogan avec animation de slide */}
+          <p 
+            className={`text-xl font-semibold text-brand-600 transition-all duration-1000 ease-out ${
+              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+            }`}
+            style={{ transitionDelay: '300ms' }}
+          >
+            {language === 'fr' ? programme.slogan : programme.sloganEn}
+          </p>
+
+          {/* Description avec animation de fade */}
+          <p 
+            className={`text-lg leading-relaxed text-neutral-600 transition-all duration-1000 ease-out ${
+              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+            }`}
+            style={{ transitionDelay: '400ms' }}
+          >
+            {language === 'fr'
+              ? programme.description
+              : programme.descriptionEn}
+          </p>
+
+          {/* Features avec animation staggered */}
+          <Card 
+            elevation="md" 
+            className={`transition-all duration-700 ${
+              isVisible 
+                ? 'translate-y-0 opacity-100 scale-100' 
+                : 'translate-y-10 opacity-0 scale-95'
+            }`}
+            style={{ transitionDelay: '500ms' }}
+          >
+            <div className="mb-4 flex items-center gap-3">
+              <StarIcon className="h-6 w-6 text-brand-500" />
+              <h3 className="font-semibold text-ink">
+                {language === 'fr' ? 'Avantages' : 'Benefits'}
+              </h3>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {(language === 'fr'
+                ? details?.benefits
+                : details?.benefitsEn
+              )?.map((benefit, idx) => (
+                <div
+                  key={idx}
+                  className={`group flex items-start gap-3 transition-all duration-500 hover:translate-x-1 ${
+                    isVisible 
+                      ? 'translate-x-0 opacity-100' 
+                      : 'translate-x-6 opacity-0'
+                  }`}
+                  style={{ transitionDelay: `${600 + idx * 100}ms` }}
+                >
+                  <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+                  <span className="text-sm leading-relaxed text-neutral-700">
+                    {benefit}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Garanties */}
+          {details?.guarantees && (
+            <Card elevation="md" className="transition-all duration-1000 delay-600">
+              <div className="mb-4 flex items-center gap-3">
+                <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
+                <h3 className="font-semibold text-ink">
+                  {language === 'fr' ? 'Nos Garanties' : 'Our Guarantees'}
+                </h3>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {(language === 'fr'
+                  ? details.guarantees
+                  : details.guaranteesEn
+                )?.map((guarantee, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-2"
+                  >
+                    <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
+                    <span className="text-sm text-neutral-600">
+                      {guarantee}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+
+          {/* CTA spécifique selon le programme */}
+          <div className="pt-4 transition-all duration-1000 delay-700">
+            {programme.id === 'freelances' && (
+              <Button
+                href="https://freelance.kobecorporation.com"
+                disabled
+                variant="primary"
+                size="lg"
+                icon={<ArrowRightIcon className="h-5 w-5" />}
+                iconPosition="right"
+              >
+                {language === 'fr'
+                  ? 'Rejoindre le programme Freelance'
+                  : 'Join the Freelance Program'}
+              </Button>
+            )}
+            {programme.id === 'etudiants' && (
+              <Button
+                href="https://internship.kobecorporation.com"
+                disabled
+                variant="primary"
+                size="lg"
+                icon={<ArrowRightIcon className="h-5 w-5" />}
+                iconPosition="right"
+              >
+                {language === 'fr'
+                  ? 'Postuler pour un stage'
+                  : 'Apply for an internship'}
+              </Button>
+            )}
+            {programme.id === 'open-source' && (
+              <Button
+                href="https://open-source.kobecorporation.com"
+                disabled
+                variant="primary"
+                size="lg"
+                icon={<ArrowRightIcon className="h-5 w-5" />}
+                iconPosition="right"
+              >
+                {language === 'fr'
+                  ? 'Voir nos projets GitHub'
+                  : 'View our GitHub projects'}
+              </Button>
+            )}
+            {programme.id === 'networking' && (
+              <Button
+                href="https://community.kobecorporation.com"
+                disabled
+                variant="primary"
+                size="lg"
+                icon={<ArrowRightIcon className="h-5 w-5" />}
+                iconPosition="right"
+              >
+                {language === 'fr'
+                  ? 'Rejoindre la communauté'
+                  : 'Join the community'}
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Images avec animations variées */}
+        <div
+          className={`space-y-6 transition-all duration-1000 ${
+            isVisible
+              ? 'translate-x-0 opacity-100'
+              : index % 2 === 0
+              ? 'translate-x-12 opacity-0 scale-95'
+              : '-translate-x-12 opacity-0 scale-95'
+          } ${index % 2 === 1 ? 'lg:order-1' : ''}`}
+          style={{ transitionDelay: '600ms' }}
+        >
+          {images.map((imageUrl, imgIndex) => (
+            <div
+              key={imgIndex}
+              className={`group relative overflow-hidden rounded-3xl transition-all duration-700 hover:shadow-2xl hover:-translate-y-2 ${
+                imgIndex === 0 ? 'lg:h-80' : 'lg:h-72'
+              } ${
+                isVisible 
+                  ? 'translate-y-0 opacity-100 scale-100 rotate-0' 
+                  : imgIndex % 2 === 0 
+                    ? 'translate-y-12 opacity-0 scale-90 rotate-3' 
+                    : 'translate-y-12 opacity-0 scale-90 -rotate-3'
+              }`}
+              style={{ transitionDelay: `${700 + imgIndex * 200}ms` }}
+            >
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-10" />
+
+              {/* Image avec animation de zoom améliorée */}
+              <OptimizedImage
+                src={imageUrl}
+                alt={`${language === 'fr' ? programme.title : programme.titleEn} - ${language === 'fr' ? 'Illustration' : 'Illustration'} ${imgIndex + 1}`}
+                width={800}
+                height={600}
+                priority={imgIndex === 0 ? "high" : "low"}
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-115 group-hover:rotate-1"
+              />
+
+              {/* Badge sur l'image */}
+              <div className="absolute bottom-4 left-4 right-4 z-20 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0 translate-y-4">
+                <div className="rounded-xl bg-white/95 backdrop-blur-sm px-4 py-2 shadow-lg">
+                  <p className="text-xs font-semibold text-ink">
+                    {language === 'fr' ? 'Programme Premium' : 'Premium Program'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function Programmes() {
   const { language } = useLanguage()
   const { elementRef: introRef, isVisible: introVisible } = useScrollAnimation({ threshold: 0.2 })
@@ -246,276 +509,16 @@ function Programmes() {
 
       {/* Programmes avec animations */}
       <div className="space-y-32">
-        {programmes.map((programme, index) => {
-          const images = programmeImages[programme.id as keyof typeof programmeImages] || []
-          const details = programmeDetails[programme.id as keyof typeof programmeDetails]
-          const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.2 })
-
-          return (
-            <section
-              key={programme.id}
-              id={programme.id}
-              ref={elementRef}
-              className="scroll-mt-20"
-            >
-              <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
-                {/* Contenu avec animations variées */}
-                <div
-                  className={`space-y-8 transition-all duration-1000 ${
-                    isVisible
-                      ? 'translate-x-0 opacity-100'
-                      : index % 2 === 0
-                      ? '-translate-x-12 opacity-0 scale-95'
-                      : 'translate-x-12 opacity-0 scale-95'
-                  } ${index % 2 === 1 ? 'lg:order-2' : ''}`}
-                >
-                  {/* Badge avec animation de bounce */}
-                  <div 
-                    className={`inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-50 to-brand-100 px-4 py-2 text-xs font-semibold text-brand-600 shadow-sm transition-all duration-500 hover:shadow-md hover:scale-105 ${
-                      isVisible ? 'translate-y-0 opacity-100 scale-100 rotate-0' : 'translate-y-6 opacity-0 scale-90 rotate-3'
-                    }`}
-                    style={{ transitionDelay: '100ms' }}
-                  >
-                    <div className="transition-transform duration-300 hover:rotate-12 hover:scale-110">
-                      {programme.icon}
-                    </div>
-                    <span>
-                      {language === 'fr' ? programme.title : programme.titleEn}
-                    </span>
-                  </div>
-
-                  {/* Titre avec animation de fade et scale */}
-                  <h2 
-                    className={`font-display text-3xl leading-tight text-ink transition-all duration-1000 ease-out md:text-4xl lg:text-5xl ${
-                      isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-8 opacity-0 scale-95'
-                    }`}
-                    style={{ transitionDelay: '200ms' }}
-                  >
-                    {language === 'fr' ? programme.title : programme.titleEn}
-                  </h2>
-
-                  {/* Slogan avec animation de slide */}
-                  <p 
-                    className={`text-xl font-semibold text-brand-600 transition-all duration-1000 ease-out ${
-                      isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
-                    }`}
-                    style={{ transitionDelay: '300ms' }}
-                  >
-                    {language === 'fr' ? programme.slogan : programme.sloganEn}
-                  </p>
-
-                  {/* Description avec animation de fade */}
-                  <p 
-                    className={`text-lg leading-relaxed text-neutral-600 transition-all duration-1000 ease-out ${
-                      isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
-                    }`}
-                    style={{ transitionDelay: '400ms' }}
-                  >
-                    {language === 'fr'
-                      ? programme.description
-                      : programme.descriptionEn}
-                  </p>
-
-                  {/* Statistiques masquées temporairement - entreprise en création */}
-                  {/* {details?.stats && (
-                    <div className="grid grid-cols-3 gap-4 transition-all duration-1000 delay-400">
-                      {details.stats.map((stat, idx) => (
-                        <div
-                          key={idx}
-                          className="group Card rounded-xl p-4 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                        >
-                          <div className="mb-1 font-display text-2xl font-bold text-brand-600 transition-colors duration-300 group-hover:text-brand-700">
-                            {stat.value}
-                          </div>
-                          <div className="text-xs text-neutral-600">
-                            {language === 'fr' ? stat.label : stat.labelEn}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )} */}
-
-                  {/* Features avec animation staggered */}
-                  <Card 
-                    elevation="md" 
-                    className={`transition-all duration-700 ${
-                      isVisible 
-                        ? 'translate-y-0 opacity-100 scale-100' 
-                        : 'translate-y-10 opacity-0 scale-95'
-                    }`}
-                    style={{ transitionDelay: '500ms' }}
-                  >
-                    <div className="mb-4 flex items-center gap-3">
-                      <StarIcon className="h-6 w-6 text-brand-500" />
-                      <h3 className="font-semibold text-ink">
-                        {language === 'fr' ? 'Avantages' : 'Benefits'}
-                      </h3>
-                    </div>
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      {(language === 'fr'
-                        ? details?.benefits
-                        : details?.benefitsEn
-                      )?.map((benefit, idx) => (
-                        <div
-                          key={idx}
-                          className={`group flex items-start gap-3 transition-all duration-500 hover:translate-x-1 ${
-                            isVisible 
-                              ? 'translate-x-0 opacity-100' 
-                              : 'translate-x-6 opacity-0'
-                          }`}
-                          style={{ transitionDelay: `${600 + idx * 100}ms` }}
-                        >
-                          <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
-                          <span className="text-sm leading-relaxed text-neutral-700">
-                            {benefit}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-
-                  {/* Garanties */}
-                  {details?.guarantees && (
-                    <Card elevation="md" className="transition-all duration-1000 delay-600">
-                      <div className="mb-4 flex items-center gap-3">
-                        <ShieldCheckIcon className="h-6 w-6 text-brand-500" />
-                        <h3 className="font-semibold text-ink">
-                          {language === 'fr' ? 'Nos Garanties' : 'Our Guarantees'}
-                        </h3>
-                      </div>
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        {(language === 'fr'
-                          ? details.guarantees
-                          : details.guaranteesEn
-                        )?.map((guarantee, idx) => (
-                          <div
-                            key={idx}
-                            className="flex items-start gap-2"
-                          >
-                            <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-500" />
-                            <span className="text-sm text-neutral-600">
-                              {guarantee}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </Card>
-                  )}
-
-                  {/* CTA spécifique selon le programme */}
-                  <div className="pt-4 transition-all duration-1000 delay-700">
-                    {programme.id === 'freelances' && (
-                      <Button
-                        href="https://freelance.kobecorporation.com"
-                        disabled
-                        variant="primary"
-                        size="lg"
-                        icon={<ArrowRightIcon className="h-5 w-5" />}
-                        iconPosition="right"
-                      >
-                        {language === 'fr'
-                          ? 'Rejoindre le programme Freelance'
-                          : 'Join the Freelance Program'}
-                      </Button>
-                    )}
-                    {programme.id === 'etudiants' && (
-                      <Button
-                        href="https://internship.kobecorporation.com"
-                        disabled
-                        variant="primary"
-                        size="lg"
-                        icon={<ArrowRightIcon className="h-5 w-5" />}
-                        iconPosition="right"
-                      >
-                        {language === 'fr'
-                          ? 'Postuler pour un stage'
-                          : 'Apply for an internship'}
-                      </Button>
-                    )}
-                    {programme.id === 'open-source' && (
-                      <Button
-                        href="https://open-source.kobecorporation.com"
-                        disabled
-                        variant="primary"
-                        size="lg"
-                        icon={<ArrowRightIcon className="h-5 w-5" />}
-                        iconPosition="right"
-                      >
-                        {language === 'fr'
-                          ? 'Voir nos projets GitHub'
-                          : 'View our GitHub projects'}
-                      </Button>
-                    )}
-                    {programme.id === 'networking' && (
-                      <Button
-                        href="https://community.kobecorporation.com"
-                        disabled
-                        variant="primary"
-                        size="lg"
-                        icon={<ArrowRightIcon className="h-5 w-5" />}
-                        iconPosition="right"
-                      >
-                        {language === 'fr'
-                          ? 'Rejoindre la communauté'
-                          : 'Join the community'}
-                      </Button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Images avec animations variées */}
-                <div
-                  className={`space-y-6 transition-all duration-1000 ${
-                    isVisible
-                      ? 'translate-x-0 opacity-100'
-                      : index % 2 === 0
-                      ? 'translate-x-12 opacity-0 scale-95'
-                      : '-translate-x-12 opacity-0 scale-95'
-                  } ${index % 2 === 1 ? 'lg:order-1' : ''}`}
-                  style={{ transitionDelay: '600ms' }}
-                >
-                  {images.map((imageUrl, imgIndex) => (
-                    <div
-                      key={imgIndex}
-                      className={`group relative overflow-hidden rounded-3xl transition-all duration-700 hover:shadow-2xl hover:-translate-y-2 ${
-                        imgIndex === 0 ? 'lg:h-80' : 'lg:h-72'
-                      } ${
-                        isVisible 
-                          ? 'translate-y-0 opacity-100 scale-100 rotate-0' 
-                          : imgIndex % 2 === 0 
-                            ? 'translate-y-12 opacity-0 scale-90 rotate-3' 
-                            : 'translate-y-12 opacity-0 scale-90 -rotate-3'
-                      }`}
-                      style={{ transitionDelay: `${700 + imgIndex * 200}ms` }}
-                    >
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-10" />
-
-                      {/* Image avec animation de zoom améliorée */}
-                      <OptimizedImage
-                        src={imageUrl}
-                        alt={`${language === 'fr' ? programme.title : programme.titleEn} - ${language === 'fr' ? 'Illustration' : 'Illustration'} ${imgIndex + 1}`}
-                        width={800}
-                        height={600}
-                        priority={imgIndex === 0 ? "high" : "low"}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-115 group-hover:rotate-1"
-                      />
-
-                      {/* Badge sur l'image */}
-                      <div className="absolute bottom-4 left-4 right-4 z-20 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0 translate-y-4">
-                        <div className="rounded-xl bg-white/95 backdrop-blur-sm px-4 py-2 shadow-lg">
-                          <p className="text-xs font-semibold text-ink">
-                            {language === 'fr' ? 'Programme Premium' : 'Premium Program'}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-          )
-        })}
+        {programmes.map((programme, index) => (
+          <ProgrammeDetailSection
+            key={programme.id}
+            programme={programme}
+            details={programmeDetails[programme.id as keyof typeof programmeDetails]}
+            images={programmeImages[programme.id as keyof typeof programmeImages] || []}
+            index={index}
+            language={language}
+          />
+        ))}
       </div>
 
       {/* CTA Final amélioré */}

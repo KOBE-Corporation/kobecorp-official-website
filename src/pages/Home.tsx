@@ -19,40 +19,18 @@ function Home() {
         description={seo.description}
         keywords={seo.keywords}
       />
-    <div className="mx-auto flex max-w-7xl flex-col gap-20 px-4 pb-8 sm:px-6 md:gap-24 md:pb-12 lg:px-8">
-      {/* Hero Section */}
-      <HeroHome />
-
-      {/* Services Section */}
-      <section id="services">
+      <div className="mx-auto flex max-w-7xl flex-col gap-20 px-4 pb-8 sm:px-6 md:gap-24 md:pb-12 lg:px-8">
+        <HeroHome />
         <ServicesGrid />
-      </section>
-
-      {/* Programs Section */}
-      <section id="programs">
         <ProgramsPreview />
-      </section>
-
-      {/* Missions Section */}
-      <section id="missions">
-        <MissionsSection />
-      </section>
-
-      {/* Process Section */}
-      <section id="process">
+        <section id="missions">
+          <MissionsSection />
+        </section>
         <ProcessSection />
-      </section>
-
-      {/* Testimonials Section - Masquée temporairement */}
-      {/* <section>
-        <TestimonialsSection />
-      </section> */}
-
-      {/* CTA Section - Plus d'espace avant le footer */}
-      <section id="cta" className="pb-8">
-        <CTASection />
-      </section>
-    </div>
+        <section id="cta" className="pb-8">
+          <CTASection />
+        </section>
+      </div>
     </>
   )
 }

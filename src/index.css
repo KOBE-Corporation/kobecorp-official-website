@@ -235,37 +235,19 @@ a,
   }
 }
 
-/* Retirer DÉFINITIVEMENT le focus ring et les borders pour les boutons de navigation */
+/* Focus visible brand pour la navigation clavier */
 nav button,
 nav a,
 nav [role="button"] {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
+  outline: none;
 }
 
-nav button:focus,
 nav button:focus-visible,
-nav button:active,
-nav a:focus,
 nav a:focus-visible,
-nav a:active,
-nav [role="button"]:focus,
-nav [role="button"]:focus-visible,
-nav [role="button"]:active {
-  outline: none !important;
+nav [role="button"]:focus-visible {
+  outline: 2px solid rgba(10, 122, 255, 0.45) !important;
+  outline-offset: 2px !important;
   box-shadow: none !important;
-  border: none !important;
-  ring: none !important;
-  outline-offset: 0 !important;
-}
-
-/* Spécifique pour les composants de navigation */
-nav button:focus-visible,
-nav a:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
 }
 
 /* Optimisation des animations avec will-change */

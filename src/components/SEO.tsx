@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { companyInfo } from '../data/siteContent'
 import { useLanguage } from '../contexts/LanguageContext'
 import { localizePath, stripLocale, SUPPORTED_LOCALES } from '../utils/locale'
+import { BRAND_IMAGE_URL } from '../constants/brand'
 
 interface SEOProps {
   title?: string
@@ -16,7 +17,7 @@ interface SEOProps {
 }
 
 const baseUrl = 'https://www.kobecorporation.com'
-const defaultImage = `${baseUrl}/og-image.png`
+const defaultImage = BRAND_IMAGE_URL
 const defaultDescription = 'KOBE Corporation - Build Your Own Legacy. Votre partenaire technologique pour transformer vos idées en solutions logicielles innovantes. Développement logiciel, hébergement, consultation et formation au Cameroun.'
 
 /**
@@ -66,7 +67,11 @@ function SEO({
 }: SEOProps) {
   const location = useLocation()
   const { language } = useLanguage()
-  const fullTitle = title ? `${title} | ${companyInfo.name}` : `${companyInfo.name} - ${companyInfo.slogan}`
+  const fullTitle = title
+    ? title.includes(companyInfo.name)
+      ? title
+      : `${title} | ${companyInfo.name}`
+    : `${companyInfo.name} - ${companyInfo.slogan}`
   const url = normalizeCanonicalUrl(location.pathname, canonical)
   const pathWithoutLocale = stripLocale(location.pathname)
   const ogLocale = language === 'en' ? 'en_US' : 'fr_FR'
@@ -160,8 +165,6 @@ function SEO({
         { property: 'og:title', content: fullTitle },
         { property: 'og:description', content: description },
         { property: 'og:image', content: image },
-        { property: 'og:image:width', content: '1200' },
-        { property: 'og:image:height', content: '630' },
         { property: 'og:image:alt', content: `${companyInfo.name} - ${description.substring(0, 100)}` },
         { property: 'og:url', content: url },
         { property: 'og:type', content: type },
@@ -226,7 +229,7 @@ function SEO({
         url: baseUrl,
         logo: {
           '@type': 'ImageObject',
-          url: `${baseUrl}/logo-nom.jpeg`,
+          url: BRAND_IMAGE_URL,
           width: 512,
           height: 512,
         },
@@ -281,14 +284,6 @@ function SEO({
         publisher: {
           '@type': 'Organization',
           name: companyInfo.name,
-        },
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: {
-            '@type': 'EntryPoint',
-            urlTemplate: `${baseUrl}/search?q={search_term_string}`,
-          },
-          'query-input': 'required name=search_term_string',
         },
         inLanguage: ['fr', 'en'],
       }

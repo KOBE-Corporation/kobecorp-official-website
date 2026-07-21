@@ -313,28 +313,8 @@ function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
-    setSubmitStatus('idle')
-
-    // Simuler l'envoi du formulaire
-    // TODO: Implémenter l'envoi réel vers un backend
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-
     setIsSubmitting(false)
-    setSubmitStatus('success')
-    
-    // Réinitialiser le formulaire
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      company: '',
-      projectType: '',
-      budget: '',
-      message: '',
-      attachment: null,
-      consent: false,
-    })
+    setSubmitStatus('error')
   }
 
   return (
@@ -427,18 +407,18 @@ function Contact() {
 
               {/* Message d'erreur */}
               {submitStatus === 'error' && (
-                <div className="mb-6 flex items-center gap-3 rounded-xl bg-red-50 p-4 text-sm text-red-800 shadow-sm">
-                  <XCircleIcon className="h-5 w-5 flex-shrink-0 text-red-600" />
+                <div className="mb-6 flex items-center gap-3 rounded-xl bg-amber-50 p-4 text-sm text-amber-900 shadow-sm">
+                  <XCircleIcon className="h-5 w-5 flex-shrink-0 text-amber-600" />
                   <div>
                     <p className="font-semibold">
                       {language === 'fr'
-                        ? 'Erreur lors de l\'envoi'
-                        : 'Error sending message'}
+                        ? 'Formulaire bientôt disponible'
+                        : 'Form coming soon'}
                     </p>
-                    <p className="text-xs text-red-700">
+                    <p className="text-xs text-amber-800">
                       {language === 'fr'
-                        ? 'Veuillez réessayer plus tard.'
-                        : 'Please try again later.'}
+                        ? 'Contactez-nous par email ou WhatsApp en attendant.'
+                        : 'Please reach us by email or WhatsApp in the meantime.'}
                     </p>
                   </div>
                 </div>
