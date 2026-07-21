@@ -3,6 +3,7 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { services } from '../../data/siteContent'
 import { useScrollAnimation } from '../../hooks/useScrollAnimation'
+import { useLocalizedPath } from '../../hooks/useLocalizedPath'
 import { Card } from '../ui/Card'
 
 interface ServicesGridProps {
@@ -12,6 +13,7 @@ interface ServicesGridProps {
 function ServicesGrid({ showIntro = true }: ServicesGridProps) {
   const { language, t } = useLanguage()
   const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.1 })
+  const lp = useLocalizedPath()
 
   return (
     <section id="services" ref={elementRef} className="space-y-10 md:space-y-12">
@@ -37,7 +39,7 @@ function ServicesGrid({ showIntro = true }: ServicesGridProps) {
             </p>
           </div>
           <NavLink
-            to="/contact"
+            to={lp('/contact')}
             className="group hidden items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 shadow-subtle transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 hover:shadow-md md:inline-flex"
           >
             {language === 'fr' ? 'Planifier un rendez-vous' : 'Schedule a meeting'}
@@ -75,7 +77,7 @@ function ServicesGrid({ showIntro = true }: ServicesGridProps) {
             
             <div className="mt-auto pt-4">
               <NavLink
-                to="/services"
+                to={lp('/services')}
                 className="group/link inline-flex items-center gap-2 text-sm font-semibold text-brand-500 transition-all duration-300 hover:gap-3 hover:text-brand-600 focus:outline-none"
               >
                 <span>

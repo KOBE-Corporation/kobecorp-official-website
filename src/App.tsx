@@ -7,13 +7,7 @@ import ScrollToTop from './components/ScrollToTop'
 import CookieConsent from './components/CookieConsent'
 import { PageLoader } from './components/PageLoader'
 import { useNavigation } from './contexts/NavigationContext'
-import {
-  DEFAULT_LOCALE,
-  getPreferredLocale,
-  isSupportedLocale,
-  localizePath,
-} from './utils/locale'
-import type { Language } from './utils/i18n'
+import { getPreferredLocale, isSupportedLocale, localizePath } from './utils/locale'
 
 const Home = lazy(() => import('./pages/Home'))
 const Services = lazy(() => import('./pages/Services'))
@@ -26,7 +20,6 @@ const Legal = lazy(() => import('./pages/Legal'))
 const Terms = lazy(() => import('./pages/Terms'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
-/** Valide le paramètre :lang et redirige si invalide */
 function LocaleGuard({ children }: { children: ReactNode }) {
   const { lang } = useParams<{ lang: string }>()
   const location = useLocation()
@@ -40,26 +33,21 @@ function LocaleGuard({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
-/** `/` → `/fr` ou `/en` selon préférence */
 function RootRedirect() {
-  const preferred = getPreferredLocale()
-  return <Navigate to={`/${preferred}`} replace />
+  return <Navigate to={`/${getPreferredLocale()}`} replace />
 }
 
-/** Anciennes URLs sans préfixe → URLs localisées */
 function LegacyRedirect({ path }: { path: string }) {
-  const preferred = getPreferredLocale()
   const location = useLocation()
   return (
     <Navigate
-      to={`${localizePath(path, preferred)}${location.search}${location.hash}`}
+      to={`${localizePath(path, getPreferredLocale())}${location.search}${location.hash}`}
       replace
     />
   )
 }
 
-const pageRoutes: Array<{ path: string; element: ReactNode }> = [
-  { path: '', element: <Home /> },
+const localizedPages: Array<{ path: string; element: ReactNode }> = [
   { path: 'services', element: <Services /> },
   { path: 'programmes', element: <Programmes /> },
   { path: 'about', element: <About /> },
@@ -128,7 +116,6 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<RootRedirect />} />
 
-            {/* Routes localisées : /fr/... et /en/... */}
             <Route
               path="/:lang"
               element={
@@ -137,24 +124,20 @@ function AppContent() {
                 </LocaleGuard>
               }
             />
-            {pageRoutes
-              .filter((route) => route.path !== '')
-              .map((route) => (
-                <Route
-                  key={route.path}
-                  path={`/:lang/${route.path}`}
-                  element={<LocaleGuard>{route.element}</LocaleGuard>}
-                />
-              ))}
 
-            {/* Compatibilité anciennes URLs sans préfixe */}
+            {localizedPages.map((route) => (
+              <Route
+                key={route.path}
+                path={`/:lang/${route.path}`}
+                element={<LocaleGuard>{route.element}</LocaleGuard>}
+              />
+            ))}
+
             {legacyPaths.map((path) => (
               <Route
                 key={path}
                 path={path}
-                element={
-                  <LegacyRedirect path={path === '/home' ? '/' : path} />
-                }
+                element={<LegacyRedirect path={path === '/home' ? '/' : path} />}
               />
             ))}
 
@@ -173,7 +156,3 @@ function App() {
 }
 
 export default App
-
-// Export utilitaire pour tests éventuels
-export type { Language }
-export { DEFAULT_LOCALE }

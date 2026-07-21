@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { companyInfo } from '../data/siteContent'
+import { useLanguage } from '../contexts/LanguageContext'
+import { localizePath, stripLocale, SUPPORTED_LOCALES } from '../utils/locale'
 
 interface SEOProps {
   title?: string
@@ -34,9 +36,10 @@ function normalizeCanonicalUrl(pathname: string, customCanonical?: string): stri
   // Normaliser le pathname
   let normalizedPath = pathname
 
-  // Rediriger /home vers /
-  if (normalizedPath === '/home') {
-    normalizedPath = '/'
+  // Rediriger /home (avec ou sans locale) vers la home localisée
+  if (stripLocale(normalizedPath) === '/home') {
+    const localeMatch = pathname.match(/^\/(fr|en)/)
+    normalizedPath = localeMatch ? `/${localeMatch[1]}` : '/'
   }
 
   // Normaliser les trailing slashes : supprimer sauf pour la racine
@@ -62,8 +65,12 @@ function SEO({
   structuredData,
 }: SEOProps) {
   const location = useLocation()
+  const { language } = useLanguage()
   const fullTitle = title ? `${title} | ${companyInfo.name}` : `${companyInfo.name} - ${companyInfo.slogan}`
   const url = normalizeCanonicalUrl(location.pathname, canonical)
+  const pathWithoutLocale = stripLocale(location.pathname)
+  const ogLocale = language === 'en' ? 'en_US' : 'fr_FR'
+  const ogLocaleAlternate = language === 'en' ? 'fr_FR' : 'en_US'
 
   useEffect(() => {
     // Utiliser requestIdleCallback pour décaler les manipulations DOM non critiques
@@ -124,6 +131,30 @@ function SEO({
         linkCanonical.setAttribute('href', url)
       })
 
+      // hreflang FR / EN / x-default
+      updates.push(() => {
+        SUPPORTED_LOCALES.forEach((locale) => {
+          const href = `${baseUrl}${localizePath(pathWithoutLocale, locale)}`
+          let link = document.querySelector(`link[rel="alternate"][hreflang="${locale}"]`)
+          if (!link) {
+            link = document.createElement('link')
+            link.setAttribute('rel', 'alternate')
+            link.setAttribute('hreflang', locale)
+            document.head.appendChild(link)
+          }
+          link.setAttribute('href', href)
+        })
+        const defaultHref = `${baseUrl}${localizePath(pathWithoutLocale, 'fr')}`
+        let xDefault = document.querySelector('link[rel="alternate"][hreflang="x-default"]')
+        if (!xDefault) {
+          xDefault = document.createElement('link')
+          xDefault.setAttribute('rel', 'alternate')
+          xDefault.setAttribute('hreflang', 'x-default')
+          document.head.appendChild(xDefault)
+        }
+        xDefault.setAttribute('href', defaultHref)
+      })
+
       // Open Graph - batch creation (amélioré)
       const ogTags = [
         { property: 'og:title', content: fullTitle },
@@ -135,8 +166,8 @@ function SEO({
         { property: 'og:url', content: url },
         { property: 'og:type', content: type },
         { property: 'og:site_name', content: companyInfo.name },
-        { property: 'og:locale', content: 'fr_FR' },
-        { property: 'og:locale:alternate', content: 'en_US' },
+        { property: 'og:locale', content: ogLocale },
+        { property: 'og:locale:alternate', content: ogLocaleAlternate },
       ]
 
       ogTags.forEach(({ property, content }) => {
@@ -286,7 +317,7 @@ function SEO({
       // Fallback pour les navigateurs qui ne supportent pas requestIdleCallback
       setTimeout(createSchemas, 0)
     }
-  }, [fullTitle, description, keywords, image, type, noindex, url, structuredData])
+  }, [fullTitle, description, keywords, image, type, noindex, url, pathWithoutLocale, ogLocale, ogLocaleAlternate, structuredData])
 
   return null
 }
