@@ -4,7 +4,6 @@ import {
   ArrowRightIcon,
   Bars3Icon,
   XMarkIcon,
-  GlobeAltIcon,
 } from '@heroicons/react/24/outline'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { companyInfo } from '../../data/siteContent'
@@ -13,6 +12,7 @@ import { MobileNavigationMenu } from '../navigation/MobileNavigationMenu'
 import { useNavigationItems } from '../../data/navigation'
 import { OptimizedImage } from '../OptimizedImage'
 import { useLocalizedPath } from '../../hooks/useLocalizedPath'
+import { LanguageFlag } from '../icons/LanguageFlag'
 
 const Header = memo(function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)

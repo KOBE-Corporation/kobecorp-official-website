@@ -1,12 +1,10 @@
 import { memo } from 'react'
 import { NavLink } from 'react-router-dom'
-import {
-  GlobeAltIcon,
-} from '@heroicons/react/24/outline'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useCookies } from '../../contexts/CookieContext'
 import { companyInfo, contactInfo, programmes } from '../../data/siteContent'
 import { WhatsAppIcon, FacebookIcon, LinkedInIcon, InstagramIcon } from '../icons/SocialIcons'
+import { LanguageFlag } from '../icons/LanguageFlag'
 import { NavigationMenu } from '../navigation/NavigationMenu'
 import { useNavigationItems } from '../../data/navigation'
 import { OptimizedImage } from '../OptimizedImage'
@@ -55,7 +53,7 @@ const Footer = memo(function Footer() {
                   className="flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-subtle transition-all duration-200 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 hover:shadow-md focus:outline-none"
                   aria-label={language === 'fr' ? 'Changer de langue vers anglais' : 'Switch language to French'}
                 >
-                  <GlobeAltIcon className="h-4 w-4 text-neutral-600" />
+                  <LanguageFlag language={language} className="h-3.5 w-[1.15rem]" />
                   <span className="uppercase text-neutral-700">{language}</span>
                 </button>
             </div>
