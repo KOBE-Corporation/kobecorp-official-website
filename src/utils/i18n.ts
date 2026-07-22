@@ -50,6 +50,27 @@ export const translations = {
         title: 'Notre mission',
         text: 'Nous créons des expériences et des opérations qui mettent vos équipes et vos clients au centre. Notre approche holistique combine stratégie, design et technologies pour livrer des résultats mesurables.',
       },
+      missions: {
+        eyebrow: 'Engagement',
+        title: 'Nos missions prioritaires',
+        subtitle: 'Donner du sens à vos projets en construisant des solutions robustes, inclusives et pérennes.',
+        secure: {
+          title: 'Sécuriser',
+          text: 'Protéger vos opérations critiques et réduire les risques techniques.',
+        },
+        modernize: {
+          title: 'Moderniser',
+          text: 'Offrir à vos équipes des outils fluides, utiles et durables.',
+        },
+        measure: {
+          title: 'Mesurer',
+          text: 'Ancrer une culture d’amélioration continue basée sur l’impact.',
+        },
+        whyEyebrow: 'Pourquoi KOBE',
+        whyTitle: 'Vision stratégique, exécution terrain.',
+        whyText: 'Un partenaire de confiance qui aligne ambition et livraison, avec un accompagnement humain et réactif à chaque étape.',
+        cta: 'Parler de votre projet',
+      },
       stats: {
         year: 'Année de création',
         availability: 'Disponibilité',
@@ -210,6 +231,27 @@ export const translations = {
       mission: {
         title: 'Our Mission',
         text: 'We create experiences and operations that put your teams and clients at the center. Our holistic approach combines strategy, design and technology to deliver measurable results.',
+      },
+      missions: {
+        eyebrow: 'Commitment',
+        title: 'Our priority missions',
+        subtitle: 'Give meaning to your projects by building robust, inclusive and lasting solutions.',
+        secure: {
+          title: 'Secure',
+          text: 'Protect your critical operations and reduce technical risks.',
+        },
+        modernize: {
+          title: 'Modernize',
+          text: 'Give your teams smooth, useful and lasting tools.',
+        },
+        measure: {
+          title: 'Measure',
+          text: 'Anchor a culture of continuous improvement driven by impact.',
+        },
+        whyEyebrow: 'Why KOBE',
+        whyTitle: 'Strategic vision, field execution.',
+        whyText: 'A trusted partner that aligns ambition and delivery, with human and responsive support at every step.',
+        cta: 'Talk about your project',
       },
       stats: {
         year: 'Year founded',

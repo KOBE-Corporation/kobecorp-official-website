@@ -9,33 +9,24 @@ import { useScrollAnimation } from '../../hooks/useScrollAnimation'
 import { Button } from '../ui/Button'
 
 function MissionsSection() {
-  const { language } = useLanguage()
+  const { t } = useLanguage()
   const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.2 })
 
   const missions = [
     {
       icon: ShieldCheckIcon,
-      title: language === 'fr' ? 'Sécuriser' : 'Secure',
-      text:
-        language === 'fr'
-          ? 'Protéger vos opérations critiques et réduire les risques techniques.'
-          : 'Protect your critical operations and reduce technical risks.',
+      title: t('home.missions.secure.title'),
+      text: t('home.missions.secure.text'),
     },
     {
       icon: SparklesIcon,
-      title: language === 'fr' ? 'Moderniser' : 'Modernize',
-      text:
-        language === 'fr'
-          ? 'Offrir à vos équipes des outils fluides, utiles et durables.'
-          : 'Give your teams smooth, useful and lasting tools.',
+      title: t('home.missions.modernize.title'),
+      text: t('home.missions.modernize.text'),
     },
     {
       icon: CheckBadgeIcon,
-      title: language === 'fr' ? 'Mesurer' : 'Measure',
-      text:
-        language === 'fr'
-          ? 'Ancrer une culture d’amélioration continue basée sur l’impact.'
-          : 'Anchor a culture of continuous improvement driven by impact.',
+      title: t('home.missions.measure.title'),
+      text: t('home.missions.measure.text'),
     },
   ]
 
@@ -63,15 +54,13 @@ function MissionsSection() {
         >
           <div className="space-y-3">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">
-              {language === 'fr' ? 'Engagement' : 'Commitment'}
+              {t('home.missions.eyebrow')}
             </p>
             <h2 className="font-display text-3xl leading-tight text-ink md:text-4xl">
-              {language === 'fr' ? 'Nos missions prioritaires' : 'Our priority missions'}
+              {t('home.missions.title')}
             </h2>
             <p className="max-w-md text-base leading-relaxed text-neutral-600">
-              {language === 'fr'
-                ? 'Donner du sens à vos projets en construisant des solutions robustes, inclusives et pérennes.'
-                : 'Give meaning to your projects by building robust, inclusive and lasting solutions.'}
+              {t('home.missions.subtitle')}
             </p>
           </div>
 
@@ -129,19 +118,15 @@ function MissionsSection() {
             <div className="space-y-5">
               <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/90 backdrop-blur-sm">
                 <span className="h-1.5 w-1.5 rounded-full bg-accent-400" />
-                {language === 'fr' ? 'Pourquoi KOBE' : 'Why KOBE'}
+                {t('home.missions.whyEyebrow')}
               </div>
 
               <h3 className="max-w-sm font-display text-2xl leading-snug md:text-3xl">
-                {language === 'fr'
-                  ? 'Vision stratégique, exécution terrain.'
-                  : 'Strategic vision, field execution.'}
+                {t('home.missions.whyTitle')}
               </h3>
 
               <p className="max-w-md text-base leading-relaxed text-white/85">
-                {language === 'fr'
-                  ? 'Un partenaire de confiance qui aligne ambition et livraison, avec un accompagnement humain et réactif à chaque étape.'
-                  : 'A trusted partner that aligns ambition and delivery, with human and responsive support at every step.'}
+                {t('home.missions.whyText')}
               </p>
             </div>
 
@@ -154,7 +139,7 @@ function MissionsSection() {
                 icon={<ArrowRightIcon className="h-4 w-4" />}
                 iconPosition="right"
               >
-                {language === 'fr' ? 'Parler de votre projet' : 'Talk about your project'}
+                {t('home.missions.cta')}
               </Button>
             </div>
           </div>

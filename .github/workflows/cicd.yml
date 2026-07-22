@@ -386,7 +386,9 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           source: "setup-front/compose.yaml"
-          target: "${{ secrets.VPS_DEPLOY_DIR || '~/kobe-corporation/setup-front' }}/"
+          # Pas de ~ : il serait pris littéralement (/home/user/~/...).
+          # Chemin relatif = sous le $HOME distant. Ou secret absolu (ex. /opt/kobe/setup-front).
+          target: "${{ secrets.VPS_DEPLOY_DIR || 'kobe-corporation/setup-front' }}/"
           strip_components: 2
           overwrite: true
 
@@ -396,7 +398,7 @@ jobs:
           FRONT_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          DEPLOY_DIR: ${{ secrets.VPS_DEPLOY_DIR || '~/kobe-corporation/setup-front' }}
+          DEPLOY_DIR: ${{ secrets.VPS_DEPLOY_DIR }}
         with:
           host: ${{ secrets.VPS_HOST }}
           port: ${{ secrets.VPS_PORT || 22 }}
@@ -406,9 +408,24 @@ jobs:
           script: |
             set -eu
 
-            DEPLOY_DIR="${DEPLOY_DIR:-$HOME/kobe-corporation/setup-front}"
+            DEPLOY_DIR="${DEPLOY_DIR:-kobe-corporation/setup-front}"
+            # Normalise ~ et chemins relatifs vers un chemin absolu sous $HOME
+            case "$DEPLOY_DIR" in
+              "~/"*) DEPLOY_DIR="$HOME/${DEPLOY_DIR#~/}" ;;
+              "~")   DEPLOY_DIR="$HOME" ;;
+              /*)    ;; # déjà absolu
+              *)     DEPLOY_DIR="$HOME/$DEPLOY_DIR" ;;
+            esac
+
             mkdir -p "$DEPLOY_DIR"
             cd "$DEPLOY_DIR"
+            echo "==> Deploy dir: $DEPLOY_DIR"
+
+            if [ ! -f compose.yaml ]; then
+              echo "compose.yaml introuvable dans $DEPLOY_DIR"
+              ls -la
+              exit 1
+            fi
 
             if ! command -v docker >/dev/null 2>&1; then
               echo "Docker absent sur le VPS"

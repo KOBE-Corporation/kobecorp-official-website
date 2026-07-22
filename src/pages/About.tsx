@@ -11,7 +11,6 @@ import {
   BuildingOffice2Icon,
   MapPinIcon,
   ClockIcon,
-  RocketLaunchIcon,
   LinkIcon,
   CodeBracketIcon,
   AcademicCapIcon,
