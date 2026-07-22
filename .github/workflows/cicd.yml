@@ -480,11 +480,30 @@ jobs:
               exit 1
             fi
 
-            HEALTH="$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "${CONTAINER_NAME}")"
-            echo "Health status: ${HEALTH}"
+            echo "==> Attente readiness (max ~90s)"
+            ok=0
+            for i in $(seq 1 30); do
+              HEALTH="$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "${CONTAINER_NAME}")"
+              echo "Tentative ${i}/30 — health: ${HEALTH}"
 
-            docker exec "${CONTAINER_NAME}" wget -q --spider http://localhost/ || {
+              if docker exec "${CONTAINER_NAME}" wget -q --spider http://127.0.0.1/; then
+                ok=1
+                break
+              fi
+
+              if [ "$HEALTH" = "unhealthy" ]; then
+                echo "Conteneur unhealthy"
+                break
+              fi
+
+              sleep 3
+            done
+
+            if [ "$ok" -ne 1 ]; then
               echo "Le conteneur ne répond pas en local"
+              docker inspect -f '{{json .State.Health}}' "${CONTAINER_NAME}" || true
               docker logs --tail 100 "${CONTAINER_NAME}" || true
               exit 1
-            }
+            fi
+
+            echo "Smoke test OK (health=$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "${CONTAINER_NAME}"))"
