@@ -386,9 +386,8 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           source: "setup-front/compose.yaml"
-          # Pas de ~ : il serait pris littéralement (/home/user/~/...).
-          # Chemin relatif = sous le $HOME distant. Ou secret absolu (ex. /opt/kobe/setup-front).
-          target: "${{ secrets.VPS_DEPLOY_DIR || 'kobe-corporation/setup-front' }}/"
+          # Chemin FIXE distinct de ben-djibril — ne pas partager VPS_DEPLOY_DIR entre repos
+          target: "kobe-corporation/setup-front/"
           strip_components: 2
           overwrite: true
 
@@ -398,18 +397,18 @@ jobs:
           FRONT_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          DEPLOY_DIR: ${{ secrets.VPS_DEPLOY_DIR }}
+          DEPLOY_DIR: kobe-corporation/setup-front
+          COMPOSE_PROJECT_NAME: kobecorp-web
         with:
           host: ${{ secrets.VPS_HOST }}
           port: ${{ secrets.VPS_PORT || 22 }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          envs: FRONT_IMAGE,DOCKERHUB_USERNAME,DOCKERHUB_PASSWORD,DEPLOY_DIR
+          envs: FRONT_IMAGE,DOCKERHUB_USERNAME,DOCKERHUB_PASSWORD,DEPLOY_DIR,COMPOSE_PROJECT_NAME
           script: |
             set -eu
 
             DEPLOY_DIR="${DEPLOY_DIR:-kobe-corporation/setup-front}"
-            # Normalise ~ et chemins relatifs vers un chemin absolu sous $HOME
             case "$DEPLOY_DIR" in
               "~/"*) DEPLOY_DIR="$HOME/${DEPLOY_DIR#~/}" ;;
               "~")   DEPLOY_DIR="$HOME" ;;
@@ -419,7 +418,7 @@ jobs:
 
             mkdir -p "$DEPLOY_DIR"
             cd "$DEPLOY_DIR"
-            echo "==> Deploy dir: $DEPLOY_DIR"
+            echo "==> Deploy dir: $DEPLOY_DIR (project=${COMPOSE_PROJECT_NAME:-kobecorp-web})"
 
             if [ ! -f compose.yaml ]; then
               echo "compose.yaml introuvable dans $DEPLOY_DIR"
@@ -444,12 +443,18 @@ jobs:
               || docker network create kobecorp-network
 
             echo "==> Docker Compose pull/up"
-            docker compose -f compose.yaml pull
-            docker compose -f compose.yaml up -d --force-recreate --remove-orphans
-            docker compose -f compose.yaml ps
+            docker compose -p "${COMPOSE_PROJECT_NAME:-kobecorp-web}" -f compose.yaml pull
+            docker compose -p "${COMPOSE_PROJECT_NAME:-kobecorp-web}" -f compose.yaml up -d --force-recreate
+            docker compose -p "${COMPOSE_PROJECT_NAME:-kobecorp-web}" -f compose.yaml ps
+
+            # Remettre l'autre site sur le réseau s'il tourne (évite 502 croisés)
+            if docker ps --format '{{.Names}}' | grep -qx 'ben-djibril-site'; then
+              docker network connect kobecorp-network ben-djibril-site 2>/dev/null || true
+            fi
 
             echo "==> Verify proxy can resolve container"
             if docker ps --format '{{.Names}}' | grep -qx 'blogpress-nginx'; then
+              docker network connect kobecorp-network blogpress-nginx 2>/dev/null || true
               docker exec blogpress-nginx wget -q --spider http://kobecorporation-web:80/ \
                 || echo "::warning::blogpress-nginx ne joint pas encore kobecorporation-web"
             fi

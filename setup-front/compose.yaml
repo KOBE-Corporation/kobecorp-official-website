@@ -1,10 +1,13 @@
+# Projet Compose unique — évite le conflit avec ben-djibril
+# (les deux dossiers s'appellent setup-front → même nom de projet par défaut)
+name: kobecorp-web
+
 services:
   web:
     image: azerty78/kobecorporation-web:latest
     container_name: kobecorporation-web
     restart: unless-stopped
-    # Pas de ports publiés sur l'hôte : blogpress-nginx proxifie via le réseau Docker
-    # (upstream kobecorporation-web:80). Le bind 127.0.0.1:4000 est optionnel pour debug.
+    # blogpress-nginx proxifie vers kobecorporation-web:80 sur kobecorp-network
     expose:
       - "80"
     ports:
