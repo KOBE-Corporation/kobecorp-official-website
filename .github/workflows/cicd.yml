@@ -439,10 +439,21 @@ jobs:
             echo "==> Pull image Docker Hub : $FRONT_IMAGE"
             docker pull "$FRONT_IMAGE"
 
+            echo "==> Ensure Docker network kobecorp-network"
+            docker network inspect kobecorp-network >/dev/null 2>&1 \
+              || docker network create kobecorp-network
+
             echo "==> Docker Compose pull/up"
             docker compose -f compose.yaml pull
             docker compose -f compose.yaml up -d --force-recreate --remove-orphans
             docker compose -f compose.yaml ps
+
+            echo "==> Verify proxy can resolve container"
+            if docker ps --format '{{.Names}}' | grep -qx 'blogpress-nginx'; then
+              docker exec blogpress-nginx wget -q --spider http://kobecorporation-web:80/ \
+                || echo "::warning::blogpress-nginx ne joint pas encore kobecorporation-web"
+            fi
+
             docker image prune -f
 
             docker logout || true
