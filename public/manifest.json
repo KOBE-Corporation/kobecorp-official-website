@@ -13,21 +13,27 @@
   "categories": ["business", "technology", "education"],
   "icons": [
     {
-      "src": "/logo-nom.jpeg",
+      "src": "/favicon.png",
       "sizes": "48x48",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/logo-nom.jpeg",
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
       "sizes": "192x192",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/logo-nom.jpeg",
+      "src": "/favicon.png",
       "sizes": "512x512",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ],

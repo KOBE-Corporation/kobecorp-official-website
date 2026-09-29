@@ -1,1 +1,27 @@
-/*    /index.html   200
+# Apex → www
+https://kobecorporation.com/*  https://www.kobecorporation.com/:splat  301!
+
+# Racine → EN (x-default)
+/              /en                    301
+
+# Trailing slash → sans slash
+/fr/           /fr                    301
+/en/           /en                    301
+/fr/*/         /fr/:splat             301
+/en/*/         /en/:splat             301
+
+# Anciennes URLs sans locale → EN
+/home          /en                    301
+/services      /en/services           301
+/programmes    /en/programmes         301
+/about         /en/about              301
+/portfolio     /en/portfolio          301
+/contact       /en/contact            301
+/privacy       /en/privacy            301
+/legal         /en/legal              301
+/terms         /en/terms              301
+/fr/home       /fr                    301
+/en/home       /en                    301
+
+# SPA fallback
+/*             /index.html            200

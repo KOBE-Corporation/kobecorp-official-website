@@ -1,31 +1,41 @@
-User-agent: *
+# User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://www.kobecorporation.com/sitemap.xml
-
-# Disallow admin and private areas (if any)
-Disallow: /admin/
-Disallow: /api/
-
-# Allow all search engines
+# Crawlers Google / Meta / réseaux sociaux — accès explicite
 User-agent: Googlebot
 Allow: /
 
-User-agent: Bingbot
+User-agent: Googlebot-Image
 Allow: /
 
-User-agent: Slurp
+User-agent: bingbot
 Allow: /
 
-User-agent: DuckDuckBot
+User-agent: facebookexternalhit
 Allow: /
 
-User-agent: Baiduspider
+User-agent: Facebot
 Allow: /
 
-User-agent: YandexBot
+User-agent: meta-externalagent
 Allow: /
 
-# Crawl-delay (optional, in seconds)
-Crawl-delay: 1
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+# Chemins sensibles / inexistants
+Disallow: /admin/
+Disallow: /api/
+Disallow: /.env
+Disallow: /.git
+
+Sitemap: https://www.kobecorporation.com/sitemap.xml
