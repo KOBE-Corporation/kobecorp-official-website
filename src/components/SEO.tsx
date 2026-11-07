@@ -4,7 +4,7 @@ import { companyInfo } from '../data/siteContent'
 import { useLanguage } from '../contexts/LanguageContext'
 import { localizePath, stripLocale, SUPPORTED_LOCALES } from '../utils/locale'
 import {
-  BRAND_LOGO_NBG_URL,
+  BRAND_LOGO_FULL_URL,
   OG_IMAGE_HEIGHT,
   OG_IMAGE_TYPE,
   OG_IMAGE_URL,
@@ -221,7 +221,7 @@ function SEO({
         url: baseUrl,
         logo: {
           '@type': 'ImageObject',
-          url: BRAND_LOGO_NBG_URL,
+          url: BRAND_LOGO_FULL_URL,
           width: 512,
           height: 512,
         },
