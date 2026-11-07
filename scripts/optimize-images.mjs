@@ -1,4 +1,4 @@
-import { mkdir, readdir, stat, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
@@ -12,6 +12,8 @@ const INPUT_DIRS = [
 ]
 
 const RASTER_EXT = new Set(['.png', '.jpg', '.jpeg'])
+const WRITE_RETRIES = 4
+const WRITE_RETRY_MS = 120
 
 /**
  * Génère des variantes .webp et .avif à côté de chaque raster source.
@@ -39,16 +41,54 @@ async function collectRasters(dir) {
   return files
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function isTransientFsError(error) {
+  const code = error?.code
+  return (
+    code === 'UNKNOWN' ||
+    code === 'EBUSY' ||
+    code === 'EPERM' ||
+    code === 'EACCES' ||
+    code === 'EAGAIN'
+  )
+}
+
 async function writeIfChanged(outPath, buffer) {
   try {
-    const existing = await sharp(outPath).toBuffer()
+    const existing = await readFile(outPath)
     if (Buffer.compare(existing, buffer) === 0) return false
   } catch {
     // fichier absent ou illisible → écrire
   }
+
   await mkdir(path.dirname(outPath), { recursive: true })
-  await writeFile(outPath, buffer)
-  return true
+
+  const tmpPath = `${outPath}.${process.pid}.${Date.now()}.tmp`
+  let lastError
+
+  for (let attempt = 1; attempt <= WRITE_RETRIES; attempt += 1) {
+    try {
+      await writeFile(tmpPath, buffer)
+      try {
+        await rename(tmpPath, outPath)
+      } catch (renameError) {
+        // Sur Windows, rename peut échouer si la cible est verrouillée → fallback overwrite
+        await writeFile(outPath, buffer)
+        await rm(tmpPath, { force: true }).catch(() => {})
+      }
+      return true
+    } catch (error) {
+      lastError = error
+      await rm(tmpPath, { force: true }).catch(() => {})
+      if (!isTransientFsError(error) || attempt === WRITE_RETRIES) break
+      await sleep(WRITE_RETRY_MS * attempt)
+    }
+  }
+
+  throw lastError
 }
 
 function formatKb(bytes) {
@@ -103,17 +143,29 @@ async function main() {
   let totalSrc = 0
   let totalWebp = 0
   let totalAvif = 0
+  let failed = 0
 
   for (const file of files) {
-    const sizes = await optimizeOne(file)
-    totalSrc += sizes.src
-    totalWebp += sizes.webp
-    totalAvif += sizes.avif
+    try {
+      const sizes = await optimizeOne(file)
+      totalSrc += sizes.src
+      totalWebp += sizes.webp
+      totalAvif += sizes.avif
+    } catch (error) {
+      failed += 1
+      const rel = path.relative(rootDir, file)
+      console.warn(`  ⚠ skip ${rel}: ${error?.code || error?.message || error}`)
+    }
   }
 
   console.log(
-    `Terminé: ${files.length} image(s). Originaux ${formatKb(totalSrc)} → WebP ${formatKb(totalWebp)} / AVIF ${formatKb(totalAvif)}`,
+    `Terminé: ${files.length - failed}/${files.length} image(s). Originaux ${formatKb(totalSrc)} → WebP ${formatKb(totalWebp)} / AVIF ${formatKb(totalAvif)}`,
   )
+
+  // Ne bloque plus npm run dev si un fichier Windows est momentanément verrouillé
+  if (failed > 0) {
+    console.warn(`optimize-images: ${failed} image(s) ignorée(s) (verrou FS / OneDrive / antivirus).`)
+  }
 }
 
 main().catch((error) => {

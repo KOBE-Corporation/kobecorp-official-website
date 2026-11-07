@@ -22,13 +22,13 @@ const Footer = memo(function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Colonne 1: À Propos */}
           <div className="lg:col-span-2">
-            <NavLink to={lp('/')} className="mb-4 inline-flex items-center gap-2 transition-transform duration-200 hover:scale-105 focus:outline-none rounded-lg">
-              <div className="flex h-12 w-12 items-center justify-center bg-transparent transition-all duration-200 hover:scale-105 p-1.5">
+            <NavLink to={lp('/')} className="mb-4 inline-flex items-center gap-3 transition-transform duration-200 hover:scale-105 focus:outline-none rounded-lg">
+              <div className="flex h-20 w-20 shrink-0 items-center justify-center bg-transparent transition-all duration-200 hover:scale-105 sm:h-24 sm:w-24">
                 <OptimizedImage
                   src={BRAND_IMAGE_PATH}
                   alt={`${companyInfo.name} - ${companyInfo.slogan}`}
-                  width={48}
-                  height={48}
+                  width={96}
+                  height={96}
                   priority="low"
                   className="h-full w-full rounded-lg object-contain"
                 />
@@ -37,11 +37,11 @@ const Footer = memo(function Footer() {
                 <p className="font-display text-lg font-semibold text-ink">
                   {companyInfo.name}
                 </p>
+                <p className="text-sm font-semibold text-brand-500">
+                  {companyInfo.slogan}
+                </p>
               </div>
             </NavLink>
-            <p className="mb-2 text-sm font-semibold text-brand-500">
-              {companyInfo.slogan}
-            </p>
             <p className="mb-4 text-sm leading-relaxed text-neutral-600">
               {language === 'fr'
                 ? 'KOBE Corporation - Votre partenaire technologique pour transformer vos idées en solutions logicielles innovantes.'
