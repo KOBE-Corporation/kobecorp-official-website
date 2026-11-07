@@ -11,7 +11,7 @@ import sharp from 'sharp'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const publicDir = path.resolve(__dirname, '../public')
-const logoPath = path.join(publicDir, 'logo-nom.jpeg')
+const logoPath = path.join(publicDir, 'logo', 'full.png')
 const faviconPngPath = path.join(publicDir, 'favicon.png')
 
 const OG_WIDTH = 1200
