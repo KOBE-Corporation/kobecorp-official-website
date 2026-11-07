@@ -507,7 +507,7 @@ function Services() {
       '@context': 'https://schema.org',
       '@type': 'OfferCatalog',
       name: language === 'fr' ? 'Forfaits SaaS KOBE Corporation' : 'KOBE Corporation SaaS Plans',
-      url: 'https://www.kobecorporation.com/services#forfait-saas',
+      url: `https://www.kobecorporation.com/${language}/services#forfait-saas`,
       itemListElement: [
         {
           '@type': 'Offer',

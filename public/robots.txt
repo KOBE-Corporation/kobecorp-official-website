@@ -1,6 +1,9 @@
 # User-agent: *
 Allow: /
 
+# Logos publics (référence presse)
+Allow: /logo/
+
 # Crawlers Google / Meta / réseaux sociaux — accès explicite
 User-agent: Googlebot
 Allow: /
@@ -32,9 +35,10 @@ Allow: /
 User-agent: WhatsApp
 Allow: /
 
-# Chemins sensibles / inexistants
+# Chemins sensibles / techniques
 Disallow: /admin/
 Disallow: /api/
+Disallow: /cdn-cgi/
 Disallow: /.env
 Disallow: /.git
 

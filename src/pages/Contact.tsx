@@ -157,7 +157,7 @@ function Contact() {
       '@context': 'https://schema.org',
       '@type': 'ContactPage',
       name: language === 'fr' ? 'Contact KOBE Corporation' : 'KOBE Corporation Contact',
-      url: 'https://www.kobecorporation.com/contact',
+      url: `https://www.kobecorporation.com/${language}/contact`,
       description: seo.description,
       inLanguage: language,
       about: {

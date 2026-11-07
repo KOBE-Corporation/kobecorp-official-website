@@ -24,8 +24,9 @@ COPY package.json package-lock.json ./
 # postinstall installe Chromium Playwright
 RUN npm ci --legacy-peer-deps --no-audit
 
-# Dépendances OS requises par Chromium (Playwright)
-RUN npx playwright install-deps chromium
+# Dépendances OS + binaire Chromium (Playwright prerender)
+RUN npx playwright install-deps chromium \
+  && npx playwright install chromium
 
 # Copier le code source
 COPY . .

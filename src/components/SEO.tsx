@@ -4,7 +4,7 @@ import { companyInfo } from '../data/siteContent'
 import { useLanguage } from '../contexts/LanguageContext'
 import { localizePath, stripLocale, SUPPORTED_LOCALES } from '../utils/locale'
 import {
-  BRAND_IMAGE_URL,
+  BRAND_LOGO_NBG_URL,
   OG_IMAGE_HEIGHT,
   OG_IMAGE_TYPE,
   OG_IMAGE_URL,
@@ -221,13 +221,12 @@ function SEO({
         url: baseUrl,
         logo: {
           '@type': 'ImageObject',
-          url: BRAND_IMAGE_URL,
+          url: BRAND_LOGO_NBG_URL,
           width: 512,
           height: 512,
         },
         image: imageUrl,
-        description,
-        foundingDate: companyInfo.year,
+        description,        foundingDate: companyInfo.year,
         address: {
           '@type': 'PostalAddress',
           streetAddress: companyInfo.address.street,
