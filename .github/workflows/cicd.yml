@@ -438,21 +438,24 @@ jobs:
               echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             fi
 
-            echo "==> Pull image Docker Hub : $FRONT_IMAGE"
-            docker pull "$FRONT_IMAGE"
-
             echo "==> Ensure Docker network kobecorp-network"
             docker network inspect kobecorp-network >/dev/null 2>&1 \
               || docker network create kobecorp-network
 
-            echo "==> Docker Compose pull/up"
-            docker compose -p "${COMPOSE_PROJECT_NAME:-kobecorp-web}" -f compose.yaml pull
-            docker compose -p "${COMPOSE_PROJECT_NAME:-kobecorp-web}" -f compose.yaml up -d --force-recreate
+            # Un seul pull (docker) — éviter `compose pull` / race containerd leases
+            echo "==> Pull image Docker Hub : $FRONT_IMAGE"
+            docker pull "$FRONT_IMAGE"
+
+            echo "==> Docker Compose up (image déjà locale, --pull never)"
+            docker compose -p "${COMPOSE_PROJECT_NAME:-kobecorp-web}" -f compose.yaml up -d --force-recreate --pull never
             docker compose -p "${COMPOSE_PROJECT_NAME:-kobecorp-web}" -f compose.yaml ps
 
             # Remettre l'autre site sur le réseau s'il tourne (évite 502 croisés)
             if docker ps --format '{{.Names}}' | grep -qx 'ben-djibril-site'; then
               docker network connect kobecorp-network ben-djibril-site 2>/dev/null || true
+            fi
+            if docker ps --format '{{.Names}}' | grep -qx 'pricing-kobecorp'; then
+              docker network connect kobecorp-network pricing-kobecorp 2>/dev/null || true
             fi
 
             echo "==> Verify proxy can resolve container"
@@ -462,7 +465,7 @@ jobs:
                 || echo "::warning::blogpress-nginx ne joint pas encore kobecorporation-web"
             fi
 
-            docker image prune -f
+            docker image prune -f || true
 
             docker logout || true
 
